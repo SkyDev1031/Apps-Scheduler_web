@@ -178,29 +178,6 @@ class AppController extends Controller
         // return response(['message' => $message, 'success' => false], 200);
     }
 
-    public function registerAppUser(Request $request)
-    {
-        $userID = $request->userID ?? $request->username;
-        $phonenumber = $request->phonenumber;
-        $isExits = AppUser::where('phonenumber', $phonenumber)->count() > 0;
-        if ($isExits) 
-            return response(json_encode(['message' => "PhoneNumber already exists.", 'success' => true]), 200);
-
-        $data = array(
-            'userID' => $userID,
-            'phonenumber' => $phonenumber,
-            'password' => ""
-        );
-        $user = AppUser::create($data);
-        if ($user && $user->id) {
-            $response =  json_encode(['message' => 'You have registered successfully!', 'success' => true]);
-            return response($response, 200);
-        } else {
-            $message = 'There was a problem creating your new account. Please try again.';
-            return response(json_encode(['message' => $message, 'success' => false]), 200);
-        }
-    }
-
 
     public function appUseInfos()
     {

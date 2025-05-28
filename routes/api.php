@@ -169,7 +169,6 @@ Route::get("/app", [AppController::class, 'index']);
 Route::post("/app/checkOnlineState", [AppController::class, 'checkOnlineState']);
 Route::post("/app/login", [AppController::class, 'login']);
 Route::post("/app/signup", [AppController::class, 'signup']);
-Route::post("/app/registerAppUser", [AppController::class, 'registerAppUser']);
 Route::post("/app/phonecheckCreate", [AppController::class, 'phonecheckCreate']);
 Route::post("/app/phonecheckValidate", [AppController::class, 'phonecheckValidate']);
 Route::post("/app/alreadyexist", [AppController::class, 'isAlreadyExist']);
@@ -193,6 +192,9 @@ Route::post('/app/appUseInfoFreq', [AppController::class, 'appUseInfoFreq']);
 Route::post('/app/phoneuseinfos', [AppController::class, 'phoneuseinfos']);
 Route::post('/app/phoneUseInfoByPhonenumber', [AppController::class, 'phoneUseInfoByPhonenumber']);
 
+
+
+Route::post("/appusers/registerAppUser", [AppUserController::class, 'registerAppUser']);
 Route::post("/appusers", [AppUserController::class, 'getAppUsers']);
 Route::post("/appusers/allow", [AppUserController::class, 'allowAppUser']);
 Route::post("/appusers/block", [AppUserController::class, 'blockAppUser']);

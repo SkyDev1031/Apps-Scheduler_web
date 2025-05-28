@@ -26,7 +26,6 @@
     <link rel="stylesheet" href="{{asset('assets/home/css/arafat-font.css')}}">
     <link rel="stylesheet" href="{{asset('assets/home/css/plugin/animate.css')}}">
     <link rel="stylesheet" href="{{asset('assets/home/css/style.css')}}">
-
     <script src="{{asset('assets/home/js/jquery.min.js')}}"></script>
     <script src="{{asset('assets/home/js/jquery-ui.min.js')}}"></script>
     <script src="{{asset('assets/home/js/bootstrap.min.js')}}"></script>

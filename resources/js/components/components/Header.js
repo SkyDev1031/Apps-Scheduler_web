@@ -10,12 +10,6 @@ export default function Header({ isSubItem, location, subNav }) {
     const { user, isAdmin, holdings } = useGlobalContext();
     const _role_prefix = isAdmin ? '/admin' : '/user';
 
-    const [isSidebarVisible, setSidebarVisible] = useState(false);
-
-    const toggleSidebar = () => {
-        setSidebarVisible(!isSidebarVisible);
-    };
-
     return (
         <div className={`${isSubItem ? 'no-border' : ''}`} id="site_header">
             <header className={`header-section body-collapse`}>
@@ -24,7 +18,7 @@ export default function Header({ isSubItem, location, subNav }) {
                         <div className="row d-flex header-area ml-0 mr-0">
                             <div className="navbar-area">
                                 <div className="d-flex align-items-center justify-content-between">
-                                    <div className="sidebar-icon" onClick={toggleSidebar}>
+                                    <div className="sidebar-icon">
                                         <img src={IMAGES.ic_menu} alt="icon" />
                                     </div>
                                     <form action="#" className="flex-fill" id="search-form-area">
@@ -61,7 +55,6 @@ export default function Header({ isSubItem, location, subNav }) {
                                 user={user}
                                 location={location}
                                 _role_prefix={_role_prefix}
-                                toggleSidebar={toggleSidebar}
                             />
                         </div>
                     </div>

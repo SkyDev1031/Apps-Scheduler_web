@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{asset('assets/user/css/plugin/animate.css')}}">
     <link rel="stylesheet" href="{{asset('assets/user/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('assets/user/jquery-horizontal-tree/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <script src="{{asset('assets/user/js/jquery.min.js')}}"></script>
     <script src="{{asset('assets/user/js/bootstrap.min.js')}}"></script>

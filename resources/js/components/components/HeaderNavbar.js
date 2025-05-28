@@ -1,39 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { Avatar } from 'primereact/avatar';
 import { IMAGES } from "../assets";
-import { AdminProfileItem, _ERROR_CODES } from "../config";
+import { AdminProfileItem } from "../config";
 
 const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_prefix }) => {
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+    const toggleDropdown = () => {
+        setDropdownVisible(!isDropdownVisible);
+    };
+
     return (
-        <div className="dashboard-nav">
-            <div className="single-item notifications-area">
-                <div className={`notifications-btn ${holdings.length > 0 ? 'header-new-badge' : ''}`}>
+        <div className="header-navbar">
+            {/* Notifications Section */}
+            <div className="header-navbar__notifications">
+                <div className={`header-navbar__notifications-icon ${holdings.length > 0 ? 'header-navbar__notifications--new' : ''}`}>
                     <img
                         src={IMAGES.ic_bell}
-                        className="bell-icon"
-                        alt="icon"
+                        className="header-navbar__bell-icon"
+                        alt="Notifications"
                     />
                 </div>
-                <div className="main-area notifications-content">
-                    <div className="head-area d-flex justify-content-between">
+                <div className="header-navbar__notifications-dropdown">
+                    <div className="header-navbar__notifications-header d-flex justify-content-between">
                         <h5>Notifications</h5>
-                        {holdings.length > 0 && <span className="mdr">{1}</span>}
+                        {holdings.length > 0 && <span className="header-navbar__badge">{1}</span>}
                     </div>
                     <ul>
                         {holdings.length > 0 &&
                             <li>
-                                <a href="/user/packages" className="d-flex">
-                                    <div className="img-area">
+                                <a href="/user/packages" className="header-navbar__notification-item d-flex">
+                                    <div className="header-navbar__notification-avatar">
                                         <img
                                             src={IMAGES.avatar}
-                                            className="max-un small-img"
-                                            alt="image"
+                                            className="header-navbar__notification-img"
+                                            alt="Notification"
                                         />
                                     </div>
-                                    <div className="text-area">
-                                        <p className="mdr">
-                                            You have holding amount, Please buy package to receive holding amount.
+                                    <div className="header-navbar__notification-text">
+                                        <p>
+                                            You have holding amount. Please buy a package to receive the holding amount.
                                         </p>
                                     </div>
                                 </a>
@@ -43,19 +50,29 @@ const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_pre
                     </ul>
                 </div>
             </div>
-            <div className="single-item user-area">
-                <div className="profile-area d-flex align-items-center">
-                    <span className="user-profile small-img">
+
+            {/* User Profile Section */}
+            <div className="header-navbar__user">
+                {/* Avatar Click to Toggle Dropdown */}
+                <div
+                    className="header-navbar__profile"
+                    onClick={toggleDropdown}
+                >
+                    <span className="header-navbar__avatar">
                         <Avatar image={IMAGES.avatar} size="small" />
                     </span>
-                    <i className="fa-solid fa-sort-down" />
+                    <i className="fa-solid fa-sort-down header-navbar__dropdown-icon" />
                 </div>
-                <div className="main-area user-content">
-                    <div className="head-area d-flex align-items-center">
-                        <div className="profile-img">
+
+                {/* Dropdown Menu */}
+                <div
+                    className={`header-navbar__dropdown ${isDropdownVisible ? 'header-navbar__dropdown--visible' : 'header-navbar__dropdown--hidden'}`}
+                >
+                    <div className="header-navbar__dropdown-header d-flex align-items-center">
+                        <div className="header-navbar__dropdown-avatar">
                             <img src={IMAGES.avatar} alt="User" />
                         </div>
-                        <div className="profile-head">
+                        <div className="header-navbar__dropdown-info">
                             <a href="#">
                                 <h5>{user.ScreenName || ''}</h5>
                             </a>
@@ -63,7 +80,7 @@ const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_pre
                     </div>
                     <ul>
                         {isAdmin && AdminProfileItem.map((item, index) => (
-                            <li key={index}>
+                            <li key={index} className="header-navbar__dropdown-item">
                                 {item.action ? (
                                     <a onClick={() => onAction(item.action)}>
                                         <i className={`fas ${item.icon}`} />
@@ -77,7 +94,7 @@ const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_pre
                                 )}
                             </li>
                         ))}
-                        <li>
+                        <li className="header-navbar__dropdown-item">
                             <a href="#" onClick={logoutUser}>
                                 <i className="fas fa-sign-out" />
                                 Logout

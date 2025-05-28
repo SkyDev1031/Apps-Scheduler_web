@@ -1,8 +1,8 @@
 window._ = require('lodash');
 
 try {
-    require('../sass/app.scss');
-    require('../css/app.css');
+    // require('../sass/app.scss');
+    // require('../css/app.css');
     require('bootstrap');
 } catch (e) { }
 

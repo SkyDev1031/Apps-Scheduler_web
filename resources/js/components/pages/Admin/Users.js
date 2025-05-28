@@ -12,7 +12,7 @@ import { _ERROR_CODES } from '../../config/index.js';
 const Users = () => {
     const [users, setUsers] = useState([]);
     const [query, setQuery] = useState('');
-    const { setLoading } = useGlobalContext();
+    const { setLoading, confirmDialog } = useGlobalContext();
 
     useEffect(() => {
         fetchUsers();
@@ -61,7 +61,9 @@ const Users = () => {
             .finally(() => setLoading(false));
     };
 
-    const handleDelete = (userId) => {
+    const handleDelete = async (userId) => {
+        const isDelete = await confirmDialog();
+        if (!isDelete) return;
         setLoading(true);
         deleteUserApi(userId)
             .then(() => {

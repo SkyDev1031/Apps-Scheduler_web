@@ -13,7 +13,7 @@ const NoPage = lazy(() => import("./pages/Errors/NoPage"))
 
 const AdminNav = [  
     { path: '/dashboard', Component: lazy(() => import("./pages/Admin/ReportApp")) },
-    { path: '/clients', Component: lazy(() => import("./pages/Admin/Clients")) },
+    { path: '/users', Component: lazy(() => import("./pages/Admin/Users")) },
     { path: '/participants', Component: lazy(() => import("./pages/Admin/Participants")) },
     { path: '/reportApp', Component: lazy(() => import("./pages/Admin/ReportApp")) },
     { path: '/reportApp/details/:encryptedPhoneNumber', Component: lazy(() => import("./pages/Admin/ReportAppDetails")) },

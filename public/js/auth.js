@@ -69760,14 +69760,9 @@ var AdminNavbar = [
 //     link: 'dashboard',
 //     icon: IMAGES.ic_dashboard,
 // },
-// {
-//     label: "Wallet",
-//     link: 'wallet',
-//     icon: IMAGES.ic_wallet,
-// },
 {
-  label: "Researchers",
-  link: 'clients',
+  label: "UserManagement",
+  link: 'users',
   icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_ref
 }, {
   label: "Participants",

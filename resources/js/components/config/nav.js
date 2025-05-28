@@ -93,14 +93,9 @@ export const AdminNavbar = [
     //     link: 'dashboard',
     //     icon: IMAGES.ic_dashboard,
     // },
-    // {
-    //     label: "Wallet",
-    //     link: 'wallet',
-    //     icon: IMAGES.ic_wallet,
-    // },
     {
-        label: "Researchers",
-        link: 'clients',
+        label: "UserManagement",
+        link: 'users',
         icon: IMAGES.ic_ref,
     },
     {

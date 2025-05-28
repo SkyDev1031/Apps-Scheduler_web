@@ -13989,6 +13989,9 @@ VirtualScroller.defaultProps = {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   allowUserApi: () => (/* binding */ allowUserApi),
+/* harmony export */   blockUserApi: () => (/* binding */ blockUserApi),
+/* harmony export */   deleteUserApi: () => (/* binding */ deleteUserApi),
 /* harmony export */   getUsersApi: () => (/* binding */ getUsersApi)
 /* harmony export */ });
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./resources/js/components/api/index.js");
@@ -13996,9 +13999,21 @@ __webpack_require__.r(__webpack_exports__);
 var getUsersApi = function getUsersApi() {
   return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST)('users', _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST);
 };
-// export const allowParticipantApi = (id) => _REQUEST('appusers/allow', _REQ_METHOD.POST, { appUserID: id });
-// export const blockParticipantApi = (id) => _REQUEST('appusers/block', _REQ_METHOD.POST, { appUserID: id });
-// export const deleteParticipantApi = (id) => _REQUEST('appusers/delete', _REQ_METHOD.POST, { appUserID:  id });
+var allowUserApi = function allowUserApi(id) {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST)('users/allow', _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, {
+    id: id
+  });
+};
+var blockUserApi = function blockUserApi(id) {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST)('users/block', _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, {
+    id: id
+  });
+};
+var deleteUserApi = function deleteUserApi(id) {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST)('users/delete', _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, {
+    id: id
+  });
+};
 
 /***/ }),
 
@@ -14023,6 +14038,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/index.js */ "./resources/js/components/utils/index.js");
 /* harmony import */ var _config_index_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../config/index.js */ "./resources/js/components/config/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -14035,7 +14056,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
- // Import the new API function
+ // Import API functions
 
 
 
@@ -14057,11 +14078,86 @@ var Users = function Users() {
   var fetchUsers = function fetchUsers() {
     setLoading(true);
     (0,_api_UserAPI_js__WEBPACK_IMPORTED_MODULE_6__.getUsersApi)().then(function (res) {
-      setUsers(res.data); // Update the state with the fetched users
+      // Map the role field to "Admin" or "Researcher"
+      var processedUsers = res.data.map(function (user) {
+        return _objectSpread(_objectSpread({}, user), {}, {
+          role: user.role === "1" ? 'Admin' : user.role === "0" ? 'Researcher' : 'Unknown'
+        });
+      });
+      setUsers(processedUsers);
     })["catch"](function (err) {
       (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config_index_js__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
     })["finally"](function () {
       return setLoading(false);
+    });
+  };
+  var handleAllow = function handleAllow(userId) {
+    setLoading(true);
+    (0,_api_UserAPI_js__WEBPACK_IMPORTED_MODULE_6__.allowUserApi)(userId).then(function () {
+      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_success)('User allowed successfully.');
+      fetchUsers(); // Refresh the user list
+    })["catch"](function (err) {
+      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config_index_js__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+    })["finally"](function () {
+      return setLoading(false);
+    });
+  };
+  var handleBlock = function handleBlock(userId) {
+    setLoading(true);
+    (0,_api_UserAPI_js__WEBPACK_IMPORTED_MODULE_6__.blockUserApi)(userId).then(function () {
+      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_success)('User blocked successfully.');
+      fetchUsers(); // Refresh the user list
+    })["catch"](function (err) {
+      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config_index_js__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+    })["finally"](function () {
+      return setLoading(false);
+    });
+  };
+  var handleDelete = function handleDelete(userId) {
+    setLoading(true);
+    (0,_api_UserAPI_js__WEBPACK_IMPORTED_MODULE_6__.deleteUserApi)(userId).then(function () {
+      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_success)('User deleted successfully.');
+      fetchUsers(); // Refresh the user list
+    })["catch"](function (err) {
+      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config_index_js__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+    })["finally"](function () {
+      return setLoading(false);
+    });
+  };
+  var actionBodyTemplate = function actionBodyTemplate(rowData) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+      className: "d-flex gap-1",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
+        icon: "pi pi-check",
+        className: "p-button-success p-button-sm",
+        tooltip: "Allow",
+        tooltipOptions: {
+          position: 'top'
+        },
+        onClick: function onClick() {
+          return handleAllow(rowData.id);
+        }
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
+        icon: "pi pi-ban",
+        className: "p-button-warning p-button-sm",
+        tooltip: "Block",
+        tooltipOptions: {
+          position: 'top'
+        },
+        onClick: function onClick() {
+          return handleBlock(rowData.id);
+        }
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
+        icon: "pi pi-trash",
+        className: "p-button-danger p-button-sm",
+        tooltip: "Delete",
+        tooltipOptions: {
+          position: 'top'
+        },
+        onClick: function onClick() {
+          return handleDelete(rowData.id);
+        }
+      })]
     });
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
@@ -14132,16 +14228,29 @@ var Users = function Users() {
         field: "status",
         body: function body(rowData) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
-            className: "".concat(rowData.status === 'active' ? 'bg-primary text-white' : rowData.status === 'block' ? 'bg-danger text-white' : 'bg-warning text-white', " px-2 py-1 rounded"),
+            className: "".concat(rowData.status === 'Active' ? 'bg-primary text-white' : rowData.status === 'Block' ? 'bg-danger text-white' : 'bg-warning text-white', " px-2 py-1 rounded"),
             children: rowData.status
           });
         },
         sortable: true
       }, "status"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+        header: "Role",
+        field: "role",
+        body: function body(rowData) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+            className: "".concat(rowData.role === 'Admin' ? 'bg-success text-white' : rowData.role === 'Researcher' ? 'bg-info text-white' : 'bg-secondary text-white', " px-2 py-1 rounded"),
+            children: rowData.role
+          });
+        },
+        sortable: true
+      }, "role"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
         header: "Registered Time",
         field: "registeredTime",
         sortable: true
-      }, "registeredTime")]
+      }, "registeredTime"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+        header: "Actions",
+        body: actionBodyTemplate
+      }, "actions")]
     })]
   });
 };

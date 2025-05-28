@@ -4,9 +4,9 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { FilterMatchMode } from 'primereact/api';
-import { getUsersApi } from '../../api/UserAPI.js'; // Import the new API function
+import { getUsersApi, allowUserApi, blockUserApi, deleteUserApi } from '../../api/UserAPI.js'; // Import API functions
 import { useGlobalContext } from "../../contexts/index.js";
-import { toast_error } from '../../utils/index.js';
+import { toast_error, toast_success } from '../../utils/index.js';
 import { _ERROR_CODES } from '../../config/index.js';
 
 const Users = () => {
@@ -22,12 +22,84 @@ const Users = () => {
         setLoading(true);
         getUsersApi()
             .then(res => {
-                setUsers(res.data); // Update the state with the fetched users
+                // Map the role field to "Admin" or "Researcher"
+                const processedUsers = res.data.map(user => ({
+                    ...user,
+                    role: user.role === "1" ? 'Admin' : user.role === "0" ? 'Researcher' : 'Unknown',
+                }));
+                setUsers(processedUsers);
             })
             .catch(err => {
                 toast_error(err, _ERROR_CODES.NETWORK_ERROR);
             })
             .finally(() => setLoading(false));
+    };
+
+    const handleAllow = (userId) => {
+        setLoading(true);
+        allowUserApi(userId)
+            .then(() => {
+                toast_success('User allowed successfully.');
+                fetchUsers(); // Refresh the user list
+            })
+            .catch(err => {
+                toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const handleBlock = (userId) => {
+        setLoading(true);
+        blockUserApi(userId)
+            .then(() => {
+                toast_success('User blocked successfully.');
+                fetchUsers(); // Refresh the user list
+            })
+            .catch(err => {
+                toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const handleDelete = (userId) => {
+        setLoading(true);
+        deleteUserApi(userId)
+            .then(() => {
+                toast_success('User deleted successfully.');
+                fetchUsers(); // Refresh the user list
+            })
+            .catch(err => {
+                toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <div className="d-flex gap-1">
+                <Button
+                    icon="pi pi-check"
+                    className="p-button-success p-button-sm"
+                    tooltip="Allow"
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => handleAllow(rowData.id)}
+                />
+                <Button
+                    icon="pi pi-ban"
+                    className="p-button-warning p-button-sm"
+                    tooltip="Block"
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => handleBlock(rowData.id)}
+                />
+                <Button
+                    icon="pi pi-trash"
+                    className="p-button-danger p-button-sm"
+                    tooltip="Delete"
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => handleDelete(rowData.id)}
+                />
+            </div>
+        );
     };
 
     return (
@@ -93,9 +165,9 @@ const Users = () => {
                     body={(rowData) => (
                         <span
                             className={`${
-                                rowData.status === 'active'
+                                rowData.status === 'Active'
                                     ? 'bg-primary text-white'
-                                    : rowData.status === 'block'
+                                    : rowData.status === 'Block'
                                     ? 'bg-danger text-white'
                                     : 'bg-warning text-white'
                             } px-2 py-1 rounded`}
@@ -106,10 +178,34 @@ const Users = () => {
                     sortable
                 />
                 <Column
+                    key="role"
+                    header="Role"
+                    field="role"
+                    body={(rowData) => (
+                        <span
+                            className={`${
+                                rowData.role === 'Admin'
+                                    ? 'bg-success text-white'
+                                    : rowData.role === 'Researcher'
+                                    ? 'bg-info text-white'
+                                    : 'bg-secondary text-white'
+                            } px-2 py-1 rounded`}
+                        >
+                            {rowData.role}
+                        </span>
+                    )}
+                    sortable
+                />
+                <Column
                     key="registeredTime"
                     header="Registered Time"
                     field="registeredTime"
                     sortable
+                />
+                <Column
+                    key="actions"
+                    header="Actions"
+                    body={actionBodyTemplate}
                 />
             </DataTable>
         </div>

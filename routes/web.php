@@ -45,13 +45,7 @@ Route::get('/admin', function () {
     return redirect('/admin/dashboard');
 });
 
-// Route::get("/admin", [AdminController::class, "index"]);
-// Route::get("/admin/dashboard", [AdminController::class, "index"]);
-// Route::get("/admin/appuseinfo", [AdminController::class, "appUseInfos"]);
-// Route::post("/admin/appuseinfobynumber", [AdminController::class, "appUseInfoByPhonenumber"]);
-// Route::post("/admin/appuseinfofreq", [AdminController::class, "appUseInfoFreq"]);
-// Route::get("/admin/phoneuseinfo", [AdminController::class, "phoneuseinfos"]);
-// Route::post("/admin/phoneuseinfobynumber", [AdminController::class, "phoneUseInfoNyPhonenumber"]);
+
 Route::any('user/{path}', function () {
     return view('user');
 })->where('path', '.+');

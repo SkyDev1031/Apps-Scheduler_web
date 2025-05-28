@@ -1,6 +1,6 @@
 import { _REQUEST, _REQ_METHOD } from './index';
 
 export const getUsersApi = () => _REQUEST('users', _REQ_METHOD.POST);
-// export const allowParticipantApi = (id) => _REQUEST('appusers/allow', _REQ_METHOD.POST, { appUserID: id });
-// export const blockParticipantApi = (id) => _REQUEST('appusers/block', _REQ_METHOD.POST, { appUserID: id });
-// export const deleteParticipantApi = (id) => _REQUEST('appusers/delete', _REQ_METHOD.POST, { appUserID:  id });
+export const allowUserApi = (id) => _REQUEST('users/allow', _REQ_METHOD.POST, { id });
+export const blockUserApi = (id) => _REQUEST('users/block', _REQ_METHOD.POST, { id });
+export const deleteUserApi = (id) => _REQUEST('users/delete', _REQ_METHOD.POST, { id });

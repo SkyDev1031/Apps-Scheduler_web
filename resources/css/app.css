@@ -1,0 +1,137 @@
+/* // Switch Button */
+.p-inputswitch {
+    margin-top: 0.25rem !important;
+}
+.text-right {
+    text-align: right !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.single-card .p-inputswitch {
+    margin-top: 0.5rem !important;
+}
+.custom-hover-row:hover {
+    background-color: #f0f8ff !important; /* Light blue color on hover */
+    cursor: pointer; /* Optional: Changes the cursor to indicate interactivity */
+}
+.p-inputswitch .p-inputswitch-slider {
+    scale     : 1.2;
+    background: #DC2626 !important;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background: #22C55E !important;
+}
+
+.p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+    background: #22C55E !important;
+}
+
+.p-progressbar {
+    border-radius: 1rem !important;
+}
+
+.p-progressbar .p-progressbar-value {
+    background: #22C55E !important;
+}
+
+.completed .p-progressbar-value {
+    background: #DC2626 !important;
+}
+
+.color-white {
+    color: #f0f8ff !important;
+}
+
+.color-danger {
+    color: #DC2626 !important;
+}
+
+.bg-gray {
+    background-color: #aaaaaa !important;
+}
+
+.bg-gray-card {
+    background-color: #e5e5e5 !important;
+}
+
+.bg-green {
+    background-color: #22C55E !important;
+}
+
+.bg-red {
+    background-color: #DC2626 !important;
+}
+
+/* Common */
+.card-scroll {
+    overflow-y     : auto;
+    scrollbar-width: 0px !important;
+}
+
+.card-height {
+    height: calc(160px + 10vmin) !important;
+}
+
+.ml-10px {
+    margin-left: 10px;
+}
+
+.width-100px {
+    width: 100px !important;
+}
+
+.p-0 input {
+    padding: 0px !important;
+}
+
+.pl-5px input {
+    padding-left: 5px !important;
+}
+
+.pr-5px input {
+    padding-right: 5px !important;
+}
+
+.pt-2px input {
+    padding-top: 2px !important;
+}
+
+.pb-2px input {
+    padding-bottom: 2px !important;
+}
+
+.text-center input {
+    text-align: center !important;
+}
+
+.discussionTextField textarea {
+    min-height: 135px !important;
+}
+
+/* Height */
+.h-50px {
+    height: 50px !important;
+}
+
+.h-45px {
+    height: 45px !important;
+}
+
+/* Disable area */
+.container-disabled {
+    pointer-events: none;
+    opacity       : 0.5;
+}
+
+/* custom button */
+.bg-green-but {
+    background: #198754;
+}
+
+.bg-green-but:hover {
+    background: transparent;
+    border: 1px solid #198754;
+    color: #198754;
+}

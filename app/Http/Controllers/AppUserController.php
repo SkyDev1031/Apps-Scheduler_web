@@ -4,32 +4,79 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log; // Import Log for debugging
+use Illuminate\Support\Facades\Http; // Import Http for making HTTP requests
+use Google\Client; // Import the Google Client class for Firebase
 use Illuminate\Http\Request;
 use App\Models\AppUser; // Import the AppUser model
 
 class AppUserController extends Controller
 {
 
+    private function sendNotificationWithToken($fcmToken, $title, $message)
+    {
+        try {
+            $client = new Client();
+            $client->setAuthConfig(storage_path('app/firebase/firebase-credentials.json'));
+            $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+            $client->fetchAccessTokenWithAssertion();
+            $accessToken = $client->getAccessToken()['access_token'];
+    
+            $projectId = 'appsscheduler-614e7'; // replace with your Firebase project ID
+            $url = "https://fcm.googleapis.com/v1/projects/{$projectId}/messages:send";
+    
+            $body = [
+                'message' => [
+                    'token' => $fcmToken,
+                    'notification' => [
+                        'title' => $title,
+                        'body' => $message,
+                    ],
+                ]
+            ];
+    
+            $response = Http::withToken($accessToken)
+                ->post($url, $body);
+    
+            if ($response->successful()) {
+                Log::info("Notification sent successfully: {$message}");
+            } else {
+                Log::error("FCM v1 error: " . $response->body());
+            }
+    
+        } catch (\Exception $e) {
+            Log::error("Exception sending FCM v1 message: " . $e->getMessage());
+        }
+    }
+    
     public function registerAppUser(Request $request)
     {
         $userID = $request->userID ?? $request->username;
         $phonenumber = $request->phonenumber;
-        $isExits = AppUser::where('phonenumber', $phonenumber)->count() > 0;
-        if ($isExits) 
-            return response(json_encode(['message' => "PhoneNumber already exists.", 'success' => true]), 200);
+        $fcmToken = $request->fcm_token; // Retrieve the fcm_token from the request
 
-        $data = array(
+        // Check if the phone number already exists
+        $isExits = AppUser::where('phonenumber', $phonenumber)->count() > 0;
+        if ($isExits) {
+            return response()->json(['message' => "PhoneNumber already exists.", 'success' => false], 200);
+        }
+
+        // Prepare the data for the new user
+        $data = [
             'userID' => $userID,
             'phonenumber' => $phonenumber,
-            'password' => ""
-        );
+            'password' => "", // Default password (can be updated later)
+            'fcm_token' => $fcmToken, // Save the fcm_token
+        ];
+
+        // Create the new user
         $user = AppUser::create($data);
+
         if ($user && $user->id) {
-            $response =  json_encode(['message' => 'You have registered successfully!', 'success' => true]);
-            return response($response, 200);
+            // Return a success response
+            return response()->json(['message' => 'You have registered successfully!', 'success' => true], 200);
         } else {
-            $message = 'There was a problem creating your new account. Please try again.';
-            return response(json_encode(['message' => $message, 'success' => false]), 200);
+            // Return an error response
+            return response()->json(['message' => 'There was a problem creating your new account. Please try again.', 'success' => false], 200);
         }
     }
 
@@ -67,12 +114,19 @@ class AppUserController extends Controller
 
         if ($id) {
             try {
-                // Update the status field to "active"
                 $appUser = AppUser::find($id);
 
                 if ($appUser) {
                     $appUser->status = 'active';
                     $appUser->save();
+
+                    // Retrieve the fcm_token and send notification
+                    $fcmToken = $appUser->fcm_token;
+                    if ($fcmToken) {
+                        $this->sendNotificationWithToken($fcmToken, 'Account Activated', 'Your account has been activated.');
+                    } else {
+                        Log::warning("FCM token not found for user {$appUser->userID}");
+                    }
 
                     Log::info("App user with ID {$id} has been allowed.");
                     return response()->json(['message' => 'App user allowed successfully.', 'status' => true]);
@@ -95,12 +149,19 @@ class AppUserController extends Controller
 
         if ($id) {
             try {
-                // Update the status field to "block"
                 $appUser = AppUser::find($id);
 
                 if ($appUser) {
                     $appUser->status = 'block';
                     $appUser->save();
+
+                    // Retrieve the fcm_token and send notification
+                    $fcmToken = $appUser->fcm_token;
+                    if ($fcmToken) {
+                        $this->sendNotificationWithToken($fcmToken, 'Account Blocked', 'Your account has been blocked.');
+                    } else {
+                        Log::warning("FCM token not found for user {$appUser->userID}");
+                    }
 
                     Log::info("App user with ID {$id} has been blocked.");
                     return response()->json(['message' => 'App user blocked successfully.', 'status' => true]);
@@ -123,11 +184,17 @@ class AppUserController extends Controller
 
         if ($id) {
             try {
-                // Delete the record by ID
                 $appUser = AppUser::find($id);
 
                 if ($appUser) {
+                    $userID = $appUser->userID;
+                    $fcmToken = $appUser->fcm_token; // Retrieve the fcm_token before deleting the user
                     $appUser->delete();
+
+                    // Send notification using the retrieved fcm_token
+                    if ($fcmToken) {
+                        $this->sendNotificationWithToken($fcmToken, 'Account Deleted', 'Your account has been deleted.');
+                    }
 
                     Log::info("App user with ID {$id} has been deleted.");
                     return response()->json(['message' => 'App user deleted successfully.', 'status' => true]);

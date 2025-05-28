@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class AppUser extends Model
 {
     use HasFactory;
+
     protected $table = 'appusers';
+
     protected $fillable = [
         'userID',
         'phonenumber',
         'password',
-        'status'
+        'status',
+        'fcm_token', // Add fcm_token to the fillable array
     ];
-
 }

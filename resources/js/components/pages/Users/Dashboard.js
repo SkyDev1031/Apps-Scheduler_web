@@ -13,7 +13,7 @@ export default function dashboard() {
     const { user, isAdmin, cryptos, setLoading, getInitialData, transactions, holdings } = useGlobalContext();
     return (
         <div className="dashboard-container">
-            Hello Dashboard
+            <h2>Dashboard</h2>
         </div>
     )
 }

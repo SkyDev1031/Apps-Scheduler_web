@@ -45,7 +45,7 @@ const SideNavbar = ({ isAdmin, user, location, _role_prefix, toggleSidebar }) =>
                     <li>
                         <Link to={`/admin/settings`}>
                             <i className="fa-solid fa-cog" /> {/* Font Awesome icon for Settings */}
-                            <span className='p-2'> Settings</span>
+                            <span>Settings</span>
                         </Link>
                     </li>
                 )}

@@ -12,7 +12,7 @@ const MainContainer = lazy(() => import("./pages/Container/MainContainer"))
 const NoPage = lazy(() => import("./pages/Errors/NoPage"))
 
 const AdminNav = [  
-    { path: '/dashboard', Component: lazy(() => import("./pages/Admin/ReportApp")) },
+    { path: '/dashboard', Component: lazy(() => import("./pages/Admin/Dashboard")) },
     { path: '/users', Component: lazy(() => import("./pages/Admin/Users")) },
     { path: '/participants', Component: lazy(() => import("./pages/Admin/Participants")) },
     { path: '/reportApp', Component: lazy(() => import("./pages/Admin/ReportApp")) },

@@ -26,6 +26,10 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
+
+Route::get("/bitquery/getTemplateSettings", [ApiController::class, 'getBitqueryTemplateSettings']);
+
+
 // UserController
 Route::post("/login", [UserController::class, 'login']);
 Route::post("/register", [UserController::class, 'register']);
@@ -35,37 +39,6 @@ Route::get("/user", [UserController::class, 'user']);
 Route::post("/users/allow", [UserController::class, 'allowUser']);
 Route::post("/users/block", [UserController::class, 'blockUser']);
 Route::post("/users/delete", [UserController::class, 'deleteUser']);
-
-
-// API Controller
-Route::get("referral/{key}", 'ApiController@checkRefLink');
-Route::get("admin/bitquery/getTemplateSettings", [ApiController::class, 'getBitqueryTemplateSettings']);
-Route::post("/v1/purchaselog", 'ApiController@insert_PurchaseLog');
-
-// App Api Router
-Route::get("/app", [AppController::class, 'index']);
-Route::post("/app/checkOnlineState", [AppController::class, 'checkOnlineState']);
-Route::post("/app/login", [AppController::class, 'login']);
-Route::post("/app/signup", [AppController::class, 'signup']);
-Route::post("/app/phonecheckCreate", [AppController::class, 'phonecheckCreate']);
-Route::post("/app/phonecheckValidate", [AppController::class, 'phonecheckValidate']);
-Route::post("/app/alreadyexist", [AppController::class, 'isAlreadyExist']);
-
-Route::post("/app/insertAppUseInfo", [AppController::class, 'insertAppUseInfo']);
-Route::post("/app/insertPhoneUseInfo", [AppController::class, 'insertPhoneUseInfo']);
-Route::post('/app/deleteAppInfoByPhonenumber', [AppController::class, 'deleteAppInfoByPhonenumber']);
-Route::post('/app/removeall', [AppController::class, 'truncateAppInfo']);
-Route::post('/app/deletepPhoneInfoByPhonenumber', [AppController::class, 'deletePhoneInfoByPhonenumber']);
-Route::post('/app/removeallphoneinfo', [AppController::class, 'truncatePhoneInfo']);
-Route::post("/app/downloadToCSV", [AppController::class, 'downloadToCSV']);
-Route::post('/app/export-csv', [AppController::class, 'exportToCSV']);
-
-Route::post('/app/appUseInfos', [AppController::class, 'appUseInfos']);
-Route::post('/app/appUseInfoDuration', [AppController::class, 'appUseInfoDuration']);
-Route::post('/app/appUseInfoFreq', [AppController::class, 'appUseInfoFreq']);
-Route::post('/app/phoneuseinfos', [AppController::class, 'phoneuseinfos']);
-Route::post('/app/phoneUseInfoByPhonenumber', [AppController::class, 'phoneUseInfoByPhonenumber']);
-
 
 // study group management
 Route::post('study-requests',                [StudyParticipantRequestController::class, 'invite']);   // researcher
@@ -77,10 +50,38 @@ Route::prefix('my-invitations')->group(function () {
 });
 
 // AppUserController
-Route::post("/appusers/registerAppUser", [AppUserController::class, 'registerAppUser']);
-Route::post("/appusers", [AppUserController::class, 'getAppUsers']);
-Route::post("/appusers/allow", [AppUserController::class, 'allowAppUser']);
-Route::post("/appusers/block", [AppUserController::class, 'blockAppUser']);
-Route::post("/appusers/delete", [AppUserController::class, 'deleteAppUser']);
-Route::post("/appusers/isActive", [AppUserController::class, 'isAllowParticipant']);
+Route::prefix('/appusers')->group(function () {
+    Route::post("/registerAppUser", [AppUserController::class, 'registerAppUser']);
+    Route::post("/", [AppUserController::class, 'getAppUsers']);
+    Route::post("/allow", [AppUserController::class, 'allowAppUser']);
+    Route::post("/block", [AppUserController::class, 'blockAppUser']);
+    Route::post("/delete", [AppUserController::class, 'deleteAppUser']);
+    Route::post("/isActive", [AppUserController::class, 'isAllowParticipant']);
+});
 
+// App Api Router
+Route::prefix('/app')->group(function () {
+
+    Route::get("/", [AppController::class, 'index']);
+    Route::post("/checkOnlineState", [AppController::class, 'checkOnlineState']);
+    Route::post("/login", [AppController::class, 'login']);
+    Route::post("/signup", [AppController::class, 'signup']);
+    Route::post("/phonecheckCreate", [AppController::class, 'phonecheckCreate']);
+    Route::post("/phonecheckValidate", [AppController::class, 'phonecheckValidate']);
+    Route::post("/alreadyexist", [AppController::class, 'isAlreadyExist']);
+
+    Route::post("/insertAppUseInfo", [AppController::class, 'insertAppUseInfo']);
+    Route::post("/insertPhoneUseInfo", [AppController::class, 'insertPhoneUseInfo']);
+    Route::post('/deleteAppInfoByPhonenumber', [AppController::class, 'deleteAppInfoByPhonenumber']);
+    Route::post('/removeall', [AppController::class, 'truncateAppInfo']);
+    Route::post('/deletepPhoneInfoByPhonenumber', [AppController::class, 'deletePhoneInfoByPhonenumber']);
+    Route::post('/removeallphoneinfo', [AppController::class, 'truncatePhoneInfo']);
+    Route::post("/downloadToCSV", [AppController::class, 'downloadToCSV']);
+    Route::post('/export-csv', [AppController::class, 'exportToCSV']);
+
+    Route::post('/appUseInfos', [AppController::class, 'appUseInfos']);
+    Route::post('/appUseInfoDuration', [AppController::class, 'appUseInfoDuration']);
+    Route::post('/appUseInfoFreq', [AppController::class, 'appUseInfoFreq']);
+    Route::post('/phoneuseinfos', [AppController::class, 'phoneuseinfos']);
+    Route::post('/phoneUseInfoByPhonenumber', [AppController::class, 'phoneUseInfoByPhonenumber']);
+});

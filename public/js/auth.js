@@ -66913,6 +66913,21 @@ function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
+var getBitqueryApi = function getBitqueryApi() {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("/bitquery", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.GET);
+};
+var updateBitqueryApi = function updateBitqueryApi(data) {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("/bitquery", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, data);
+};
+var deleteBitqueryApi = function deleteBitqueryApi(id) {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("/bitquery/".concat(id), _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.DELETE);
+};
+var getBitqueryTemplateSettings = function getBitqueryTemplateSettings() {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("/bitquery/getTemplateSettings", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.GET);
+};
+var updateBitqueryTemplateSettingApi = function updateBitqueryTemplateSettingApi(data) {
+  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("/bitquery/updateTemplateSettings", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, data);
+};
 var loginApi = function loginApi(username, password) {
   return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)('login', _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, {
     username: username,
@@ -67227,21 +67242,6 @@ var getNonReferralApi = function getNonReferralApi() {
 };
 var updateNonReferralApi = function updateNonReferralApi(data) {
   return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("admin/referral", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, data);
-};
-var getBitqueryApi = function getBitqueryApi() {
-  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("admin/bitquery", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.GET);
-};
-var updateBitqueryApi = function updateBitqueryApi(data) {
-  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("admin/bitquery", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, data);
-};
-var deleteBitqueryApi = function deleteBitqueryApi(id) {
-  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("admin/bitquery/".concat(id), _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.DELETE);
-};
-var getBitqueryTemplateSettings = function getBitqueryTemplateSettings() {
-  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("admin/bitquery/getTemplateSettings", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.GET);
-};
-var updateBitqueryTemplateSettingApi = function updateBitqueryTemplateSettingApi(data) {
-  return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("admin/bitquery/updateTemplateSettings", _index__WEBPACK_IMPORTED_MODULE_0__._REQ_METHOD.POST, data);
 };
 var getAllContacts = function getAllContacts() {
   return (0,_index__WEBPACK_IMPORTED_MODULE_0__._REQUEST_ORIGIN)("contacts");

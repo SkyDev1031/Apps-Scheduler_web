@@ -1,5 +1,11 @@
 import { _REQUEST_ORIGIN, _REQ_METHOD } from './index';
 
+export const getBitqueryApi = () => _REQUEST_ORIGIN(`/bitquery`, _REQ_METHOD.GET)
+export const updateBitqueryApi = (data) => _REQUEST_ORIGIN(`/bitquery`, _REQ_METHOD.POST, data)
+export const deleteBitqueryApi = (id) => _REQUEST_ORIGIN(`/bitquery/${id}`, _REQ_METHOD.DELETE)
+
+export const getBitqueryTemplateSettings = () => _REQUEST_ORIGIN(`/bitquery/getTemplateSettings`, _REQ_METHOD.GET)
+export const updateBitqueryTemplateSettingApi = (data) => _REQUEST_ORIGIN(`/bitquery/updateTemplateSettings`, _REQ_METHOD.POST, data)
 
 export const loginApi = (username, password) => _REQUEST_ORIGIN('login', _REQ_METHOD.POST, { username, password })
 export const getUserApi = () => _REQUEST_ORIGIN('user', _REQ_METHOD.GET)
@@ -121,14 +127,6 @@ export const updateNetworkApi = (data) => _REQUEST_ORIGIN(`admin/network`, _REQ_
 export const runBinaryPayoutApi = () => _REQUEST_ORIGIN(`admin/binary-payout`, _REQ_METHOD.GET)
 export const getNonReferralApi = () => _REQUEST_ORIGIN(`admin/referral`, _REQ_METHOD.GET)
 export const updateNonReferralApi = (data) => _REQUEST_ORIGIN(`admin/referral`, _REQ_METHOD.POST, data)
-
-export const getBitqueryApi = () => _REQUEST_ORIGIN(`admin/bitquery`, _REQ_METHOD.GET)
-export const updateBitqueryApi = (data) => _REQUEST_ORIGIN(`admin/bitquery`, _REQ_METHOD.POST, data)
-export const deleteBitqueryApi = (id) => _REQUEST_ORIGIN(`admin/bitquery/${id}`, _REQ_METHOD.DELETE)
-
-export const getBitqueryTemplateSettings = () => _REQUEST_ORIGIN(`admin/bitquery/getTemplateSettings`, _REQ_METHOD.GET)
-export const updateBitqueryTemplateSettingApi = (data) => _REQUEST_ORIGIN(`admin/bitquery/updateTemplateSettings`, _REQ_METHOD.POST, data)
-
 export const getAllContacts = () => _REQUEST_ORIGIN(`contacts`)
 
 export const uploadApi = (formdata) => {

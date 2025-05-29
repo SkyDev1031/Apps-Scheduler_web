@@ -51,7 +51,39 @@ use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Http; // Laravel HTTP client
 class ApiController extends Controller
 {
-    //
+    // Bitquery Settings
+    public function getBitquerySettings()
+    {
+        $data = Settings::where('key', SettingsKey::BITQUERY)->get();
+        return response(['data' => $data, 'success' => true], 200);
+    }
+    public function updateBitquerySettings(Request $request)
+    {
+        $id = $request->id;
+        $data = $request->except("id");
+        $data['key']  = SettingsKey::BITQUERY;
+        Settings::updateOrCreate(['id' => $id], $data);
+        return response(['message' => $id == 0 ? 'Successfully added the api' : 'Successfully updated the api', 'success' => true], 200);
+    }
+    public function deleteBitquerySettings($id)
+    {
+        Settings::find($id)->delete();
+        return response(['message' => 'Successfully deleted the api!', 'success' => true], 200);
+    }
+    public function getBitqueryTemplateSettings()
+    {
+        $isRegistration = AdminTemplateSettings::where('field', SettingsKey::ADMINTEMPLATEISREGISTRATION)->get()->first();
+        $register = AdminTemplateSettings::where('field', SettingsKey::ADMINTEMPLATEUSERLIMIT)->get()->first();
+        $data = ["isRegistration" => $isRegistration->value, "register" => $register->value];
+        return response(['success' => true, 'data' => $data], 200);
+    }
+    public function updateBitqueryTemplateSettings(Request $request)
+    {
+        $data = $request->except("id");
+        $result = AdminTemplateSettings::updateOrCreate(["field" => $data["key"]], ["value" => $data["value"]]);
+        return response(['message' => 'Successfully Updated', 'success' => true], 200);
+    }
+
 
     public function find_last_child($UserID, $PlaceReferralOn)
     {
@@ -1796,37 +1828,6 @@ class ApiController extends Controller
         unset($adminData['updated_at']);
         AdminSettings::where('id', 1)->update($adminData);
         return response(['message' => 'Successfully updated the admin settings!', 'success' => true], 200);
-    }
-    public function getBitquerySettings()
-    {
-        $data = Settings::where('key', SettingsKey::BITQUERY)->get();
-        return response(['data' => $data, 'success' => true], 200);
-    }
-    public function updateBitquerySettings(Request $request)
-    {
-        $id = $request->id;
-        $data = $request->except("id");
-        $data['key']  = SettingsKey::BITQUERY;
-        Settings::updateOrCreate(['id' => $id], $data);
-        return response(['message' => $id == 0 ? 'Successfully added the api' : 'Successfully updated the api', 'success' => true], 200);
-    }
-    public function deleteBitquerySettings($id)
-    {
-        Settings::find($id)->delete();
-        return response(['message' => 'Successfully deleted the api!', 'success' => true], 200);
-    }
-    public function getBitqueryTemplateSettings()
-    {
-        $isRegistration = AdminTemplateSettings::where('field', SettingsKey::ADMINTEMPLATEISREGISTRATION)->get()->first();
-        $register = AdminTemplateSettings::where('field', SettingsKey::ADMINTEMPLATEUSERLIMIT)->get()->first();
-        $data = ["isRegistration" => $isRegistration->value, "register" => $register->value];
-        return response(['success' => true, 'data' => $data], 200);
-    }
-    public function updateBitqueryTemplateSettings(Request $request)
-    {
-        $data = $request->except("id");
-        $result = AdminTemplateSettings::updateOrCreate(["field" => $data["key"]], ["value" => $data["value"]]);
-        return response(['message' => 'Successfully Updated', 'success' => true], 200);
     }
     public function getTransactions()
     {

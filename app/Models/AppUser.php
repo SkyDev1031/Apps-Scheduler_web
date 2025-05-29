@@ -18,4 +18,14 @@ class AppUser extends Model
         'status',
         'fcm_token', // Add fcm_token to the fillable array
     ];
+
+    public function study()
+    {
+        return $this->belongsTo(Study::class);
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(StudyParticipantRequest::class, 'participant_id');
+    }
 }

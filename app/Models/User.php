@@ -65,4 +65,11 @@ class User extends Authenticatable
 
 		return $result->fullname;
 	}
+
+	public function studies()
+	{
+		return $this->hasMany(Study::class, 'researcher_id');
+	}
+
+	
 }

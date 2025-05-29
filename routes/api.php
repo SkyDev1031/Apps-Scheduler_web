@@ -5,6 +5,9 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudyController;
+use App\Http\Controllers\StudyParticipantRequestController;
+use App\Models\AppUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +66,15 @@ Route::post('/app/appUseInfoFreq', [AppController::class, 'appUseInfoFreq']);
 Route::post('/app/phoneuseinfos', [AppController::class, 'phoneuseinfos']);
 Route::post('/app/phoneUseInfoByPhonenumber', [AppController::class, 'phoneUseInfoByPhonenumber']);
 
+
+// study group management
+Route::post('study-requests',                [StudyParticipantRequestController::class, 'invite']);   // researcher
+Route::delete('study-requests/{id}',         [StudyParticipantRequestController::class, 'cancel']);   // researcher
+Route::prefix('my-invitations')->group(function () {
+    Route::get('/',                              [StudyParticipantRequestController::class, 'myInvitations']);
+    Route::post('{id}/approve',                  [StudyParticipantRequestController::class, 'approve']);
+    Route::post('{id}/decline',                  [StudyParticipantRequestController::class, 'decline']);
+});
 
 // AppUserController
 Route::post("/appusers/registerAppUser", [AppUserController::class, 'registerAppUser']);

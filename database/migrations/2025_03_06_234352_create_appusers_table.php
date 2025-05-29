@@ -18,6 +18,8 @@ class CreateAppusersTable extends Migration
             $table->string('userID');
             $table->string('phonenumber')->unique();
             $table->string('password');
+            $table->enum('status', ['Pending', 'Active', 'Disenrolled'])->default('Pending');
+            $table->string('fcm_token')->nullable();
             $table->timestamps();
         });
     }

@@ -27,21 +27,13 @@ class User extends Authenticatable
 		'secPassword',
 		'activation_code',
 		'status',
-		'created_at',
-		'CanReceiveBinaryPayouts',
 		'LoginIP',
 		'LoginStatus',
 		'Token',
-		'TimeStamp',
-		'ParentID',
-		'ChildID',
-		'PlaceReferralOn',
-		'Leg',
-		'Referral',
-		'sponsor',
-		'WalletBalance',
 		'role',
 		'support',
+		'created_at',
+		'updated_at'
 	];
 
 	/**

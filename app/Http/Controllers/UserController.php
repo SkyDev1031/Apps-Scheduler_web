@@ -43,10 +43,6 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        $ref_leg = '';
-        $ref_link = '';
-        $ref_user_name = '';
-
         $username = $request->email;
         $screenname = $request->screenName;
         $fullname = $screenname;
@@ -54,12 +50,6 @@ class UserController extends Controller
         $isExits = User::where('username', $username)->orwhere('ScreenName', $screenname)->orwhere('fullname', $fullname)->count() > 0;
         if ($isExits) return response(['message' => "Email or Screen Name already exits.", 'success' => false], 200);
 
-        $cryptoRef = null;
-        $refUser = null;
-
-        $PlaceReferralOn = $ref_leg;
-        $Referral = $ref_link;
-        $Sponsor = $ref_user_name;
         $phone = '';
         $password = $request->password;
         $secPassword = $request->secPassword;
@@ -73,15 +63,10 @@ class UserController extends Controller
             'password' => Hash::make($password),
             'secPassword' => Hash::make($secPassword),
             'activation_code' => $code,
-            'PlaceReferralOn' => $PlaceReferralOn,
-            'Referral' => $Referral,
-            'sponsor' => $Sponsor,
-            'created_at' => date('Y-m-d'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
             'status' => 'Pending',
             'LoginIP' => $request->ip(),
-            'Token' => '',
-            'ChildID' => 0,
-            'WalletBalance' => 0,
         );
         $user = User::create($data);
 

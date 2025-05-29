@@ -152,26 +152,26 @@ class AppUserController extends Controller
                 $appUser = AppUser::find($id);
 
                 if ($appUser) {
-                    $appUser->status = 'block';
+                    $appUser->status = 'disenrolled';
                     $appUser->save();
 
                     // Retrieve the fcm_token and send notification
                     $fcmToken = $appUser->fcm_token;
                     if ($fcmToken) {
-                        $this->sendNotificationWithToken($fcmToken, 'Account Blocked', 'Your account has been blocked.');
+                        $this->sendNotificationWithToken($fcmToken, 'Account disenrolled', 'Your account has been disenrolled.');
                     } else {
                         Log::warning("FCM token not found for user {$appUser->userID}");
                     }
 
                     Log::info("App user with ID {$id} has been blocked.");
-                    return response()->json(['message' => 'App user blocked successfully.', 'status' => true]);
+                    return response()->json(['message' => 'App user disenrolled successfully.', 'status' => true]);
                 } else {
                     Log::warning("App user with ID {$id} not found.");
                     return response()->json(['error' => 'App user not found.', 'status' => false], 404);
                 }
             } catch (\Exception $e) {
                 Log::error("Error blocking app user with ID {$id}: " . $e->getMessage());
-                return response()->json(['error' => 'Failed to block app user.', 'status' => false], 500);
+                return response()->json(['error' => 'Failed to disenroll app user.', 'status' => false], 500);
             }
         } else {
             return response()->json(['error' => 'App user ID is required.', 'status' => false], 400);

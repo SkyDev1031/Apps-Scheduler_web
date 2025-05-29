@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
@@ -8,23 +8,91 @@ import { getParticipantsApi, allowParticipantApi, blockParticipantApi, deletePar
 import { useGlobalContext } from "../../contexts";
 import { toast_success, toast_error } from '../../utils/index.js';
 import { _ERROR_CODES } from '../../config';
+import { Menu } from 'primereact/menu';
+
+const ParticipantRow = ({ participant, onAllow, onBlock, onDelete }) => {
+    const menuRef = useRef(null); // Use useRef to initialize the menu reference
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'active':
+                return '#007bff'; // Primary (blue)
+            case 'disenrolled':
+                return '#dc3545'; // Danger (red)
+            case 'pending':
+                return '#ffc107'; // Warning (yellow)
+            default:
+                return '#6c757d'; // Default (gray)
+        }
+    };
+
+    const menuItems = [
+        {
+            label: 'Allow',
+            icon: 'pi pi-check',
+            style: { color: getStatusColor(participant.status) }, // Set icon color dynamically
+            command: () => onAllow(participant),
+        },
+        {
+            label: 'Disenroll',
+            icon: 'pi pi-ban',
+            style: { color: getStatusColor(participant.status) }, // Set icon color dynamically
+            command: () => onBlock(participant),
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-trash',
+            style: { color: getStatusColor(participant.status) }, // Set icon color dynamically
+            command: () => onDelete(participant),
+        },
+    ];
+
+    return (
+        <div className="participant-row">
+            <span>{participant.name}</span>
+            <Menu model={menuItems} popup ref={menuRef} /> {/* Attach ref to Menu */}
+            <Button
+                icon="pi pi-ellipsis-v"
+                className="p-button-rounded p-button-text"
+                onClick={(event) => menuRef.current.toggle(event)} // Use menuRef.current to access the menu
+            />
+        </div>
+    );
+};
 
 const Participants = () => {
     const [participants, setParticipants] = useState([]);
     const [query, setQuery] = useState('');
     const { setLoading, confirmDialog } = useGlobalContext();
+    const isMounted = useRef(true); // Track if the component is mounted
 
     useEffect(() => {
-        console.log("Hello Participant");
+        isMounted.current = true; // Set mounted to true
         getParticipants();
+
+        return () => {
+            isMounted.current = false; // Set mounted to false on unmount
+        };
     }, []);
 
     const getParticipants = () => {
         setLoading(true);
         getParticipantsApi()
-            .then(res => { setParticipants(res.data); })
-            .catch(err => { toast_error(err, _ERROR_CODES.NETWORK_ERROR); })
-            .finally(() => setLoading(false));
+            .then(res => {
+                if (isMounted.current) {
+                    setParticipants(res.data); // Update state only if the component is mounted
+                }
+            })
+            .catch(err => {
+                if (isMounted.current) {
+                    toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                }
+            })
+            .finally(() => {
+                if (isMounted.current) {
+                    setLoading(false);
+                }
+            });
     };
 
     const handleAllow = (participant) => {
@@ -32,23 +100,27 @@ const Participants = () => {
         const id = participant.id;
         allowParticipantApi(id)
             .then(res => {
-                console.log(res)
-                if (res.status === true) {
-                    // Update the participant's status in the state
+                if (isMounted.current && res.status === true) {
                     setParticipants(prevParticipants =>
                         prevParticipants.map(p =>
-                            p.id === id ? { ...p, status: 'active' } : p
+                            p.id === id ? { ...p, status: 'Active' } : p
                         )
                     );
                     toast_success(res.message);
-                } else {
+                } else if (isMounted.current) {
                     toast_error(res.message, _ERROR_CODES.NETWORK_ERROR);
                 }
             })
             .catch(err => {
-                toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                if (isMounted.current) {
+                    toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                }
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                if (isMounted.current) {
+                    setLoading(false);
+                }
+            });
     };
 
     const handleBlock = (participant) => {
@@ -56,22 +128,27 @@ const Participants = () => {
         const id = participant.id;
         blockParticipantApi(id)
             .then(res => {
-                if (res.status === true) {
-                    // Update the participant's status in the state
+                if (isMounted.current && res.status === true) {
                     setParticipants(prevParticipants =>
                         prevParticipants.map(p =>
-                            p.id === id ? { ...p, status: 'block' } : p
+                            p.id === id ? { ...p, status: 'Disenrolled' } : p
                         )
                     );
                     toast_success(res.message);
-                } else {
+                } else if (isMounted.current) {
                     toast_error(res.message, _ERROR_CODES.NETWORK_ERROR);
                 }
             })
             .catch(err => {
-                toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                if (isMounted.current) {
+                    toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                }
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                if (isMounted.current) {
+                    setLoading(false);
+                }
+            });
     };
 
     const handleDelete = async (participant) => {
@@ -82,20 +159,26 @@ const Participants = () => {
         const id = participant.id;
         deleteParticipantApi(id)
             .then(res => {
-                if (res.status === true) {
+                if (isMounted.current && res.status === true) {
                     // Remove the participant from the state
                     setParticipants(prevParticipants =>
                         prevParticipants.filter(p => p.id !== id)
                     );
                     toast_success(res.message);
-                } else {
+                } else if (isMounted.current) {
                     toast_error(res.message, _ERROR_CODES.NETWORK_ERROR);
                 }
             })
             .catch(err => {
-                toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                if (isMounted.current) {
+                    toast_error(err, _ERROR_CODES.NETWORK_ERROR);
+                }
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                if (isMounted.current) {
+                    setLoading(false);
+                }
+            });
     };
 
     return (
@@ -149,9 +232,9 @@ const Participants = () => {
                     body={(rowData) => (
                         <span
                             className={`${
-                                rowData.status === 'active'
+                                rowData.status === 'Active'
                                     ? 'bg-primary text-white'
-                                    : rowData.status === 'block'
+                                    : rowData.status === 'Disenrolled'
                                     ? 'bg-danger text-white'
                                     : 'bg-warning text-white'
                             } px-2 py-1 rounded`}
@@ -171,24 +254,14 @@ const Participants = () => {
                     key="actions"
                     header="Actions"
                     body={(rowData) => (
-                        <div className="table-action">
-                            <Button
-                                label="Allow"
-                                className="p-button-rounded p-button-primary m-1"
-                                onClick={() => handleAllow(rowData)}
-                            />
-                            <Button
-                                label="Block"
-                                className="p-button-rounded p-button-danger m-1"
-                                onClick={() => handleBlock(rowData)}
-                            />
-                            <Button
-                                label="Delete"
-                                className="p-button-rounded p-button-secondary m-1"
-                                onClick={() => handleDelete(rowData)}
-                            />
-                        </div>
+                        <ParticipantRow
+                            participant={rowData}
+                            onAllow={handleAllow}
+                            onBlock={handleBlock}
+                            onDelete={handleDelete}
+                        />
                     )}
+                    className="p-column-header-actions" // Add class for styling
                 />
             </DataTable>
         </div>

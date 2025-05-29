@@ -9452,6 +9452,369 @@ var KeyFilter = {
 
 /***/ }),
 
+/***/ "./node_modules/primereact/menu/menu.esm.js":
+/*!**************************************************!*\
+  !*** ./node_modules/primereact/menu/menu.esm.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Menu: () => (/* binding */ Menu)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var primereact_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! primereact/api */ "./node_modules/primereact/api/api.esm.js");
+/* harmony import */ var primereact_csstransition__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! primereact/csstransition */ "./node_modules/primereact/csstransition/csstransition.esm.js");
+/* harmony import */ var primereact_hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! primereact/hooks */ "./node_modules/primereact/hooks/hooks.esm.js");
+/* harmony import */ var primereact_overlayservice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! primereact/overlayservice */ "./node_modules/primereact/overlayservice/overlayservice.esm.js");
+/* harmony import */ var primereact_portal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! primereact/portal */ "./node_modules/primereact/portal/portal.esm.js");
+/* harmony import */ var primereact_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! primereact/utils */ "./node_modules/primereact/utils/utils.esm.js");
+
+
+
+
+
+
+
+
+function _extends() {
+  _extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends.apply(this, arguments);
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArrayLimit(arr, i) {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
+    try {
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0) {
+        ;
+      }
+    } catch (err) {
+      _d = !0, _e = err;
+    } finally {
+      try {
+        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+    return _arr;
+  }
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+var Menu = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.memo( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function (props, ref) {
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(!props.popup),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    visibleState = _React$useState2[0],
+    setVisibleState = _React$useState2[1];
+  var menuRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  var targetRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  var _useOverlayListener = (0,primereact_hooks__WEBPACK_IMPORTED_MODULE_3__.useOverlayListener)({
+      target: targetRef,
+      overlay: menuRef,
+      listener: function listener(event, _ref) {
+        var valid = _ref.valid;
+        valid && hide(event);
+      },
+      when: visibleState
+    }),
+    _useOverlayListener2 = _slicedToArray(_useOverlayListener, 2),
+    bindOverlayListener = _useOverlayListener2[0],
+    unbindOverlayListener = _useOverlayListener2[1];
+  var onPanelClick = function onPanelClick(event) {
+    if (props.popup) {
+      primereact_overlayservice__WEBPACK_IMPORTED_MODULE_4__.OverlayService.emit('overlay-click', {
+        originalEvent: event,
+        target: targetRef.current
+      });
+    }
+  };
+  var onItemClick = function onItemClick(event, item) {
+    if (item.disabled) {
+      event.preventDefault();
+      return;
+    }
+    if (!item.url) {
+      event.preventDefault();
+    }
+    if (item.command) {
+      item.command({
+        originalEvent: event,
+        item: item
+      });
+    }
+    if (props.popup) {
+      hide(event);
+    }
+  };
+  var onItemKeyDown = function onItemKeyDown(event, item) {
+    var listItem = event.currentTarget.parentElement;
+    switch (event.which) {
+      //down
+      case 40:
+        var nextItem = findNextItem(listItem);
+        nextItem && nextItem.children[0].focus();
+        event.preventDefault();
+        break;
+
+      //up
+      case 38:
+        var prevItem = findPrevItem(listItem);
+        prevItem && prevItem.children[0].focus();
+        event.preventDefault();
+        break;
+    }
+  };
+  var findNextItem = function findNextItem(item) {
+    var nextItem = item.nextElementSibling;
+    return nextItem ? primereact_utils__WEBPACK_IMPORTED_MODULE_6__.DomHandler.hasClass(nextItem, 'p-disabled') || !primereact_utils__WEBPACK_IMPORTED_MODULE_6__.DomHandler.hasClass(nextItem, 'p-menuitem') ? findNextItem(nextItem) : nextItem : null;
+  };
+  var findPrevItem = function findPrevItem(item) {
+    var prevItem = item.previousElementSibling;
+    return prevItem ? primereact_utils__WEBPACK_IMPORTED_MODULE_6__.DomHandler.hasClass(prevItem, 'p-disabled') || !primereact_utils__WEBPACK_IMPORTED_MODULE_6__.DomHandler.hasClass(prevItem, 'p-menuitem') ? findPrevItem(prevItem) : prevItem : null;
+  };
+  var toggle = function toggle(event) {
+    if (props.popup) {
+      visibleState ? hide(event) : show(event);
+    }
+  };
+  var show = function show(event) {
+    targetRef.current = event.currentTarget;
+    setVisibleState(true);
+    props.onShow && props.onShow(event);
+  };
+  var hide = function hide(event) {
+    targetRef.current = event.currentTarget;
+    setVisibleState(false);
+    props.onHide && props.onHide(event);
+  };
+  var onEnter = function onEnter() {
+    primereact_utils__WEBPACK_IMPORTED_MODULE_6__.ZIndexUtils.set('menu', menuRef.current, primereact_api__WEBPACK_IMPORTED_MODULE_1__["default"].autoZIndex, props.baseZIndex || primereact_api__WEBPACK_IMPORTED_MODULE_1__["default"].zIndex['menu']);
+    primereact_utils__WEBPACK_IMPORTED_MODULE_6__.DomHandler.absolutePosition(menuRef.current, targetRef.current);
+  };
+  var onEntered = function onEntered() {
+    bindOverlayListener();
+  };
+  var onExit = function onExit() {
+    targetRef.current = null;
+    unbindOverlayListener();
+  };
+  var onExited = function onExited() {
+    primereact_utils__WEBPACK_IMPORTED_MODULE_6__.ZIndexUtils.clear(menuRef.current);
+  };
+  (0,primereact_hooks__WEBPACK_IMPORTED_MODULE_3__.useUnmountEffect)(function () {
+    primereact_utils__WEBPACK_IMPORTED_MODULE_6__.ZIndexUtils.clear(menuRef.current);
+  });
+  react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle(ref, function () {
+    return {
+      props: props,
+      toggle: toggle,
+      show: show,
+      hide: hide,
+      getElement: function getElement() {
+        return menuRef.current;
+      },
+      getTarget: function getTarget() {
+        return targetRef.current;
+      }
+    };
+  });
+  var createSubmenu = function createSubmenu(submenu, index) {
+    var key = submenu.label + '_' + index;
+    var className = (0,primereact_utils__WEBPACK_IMPORTED_MODULE_6__.classNames)('p-submenu-header', {
+      'p-disabled': submenu.disabled
+    }, submenu.className);
+    var items = submenu.items.map(createMenuItem);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+      key: key
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
+      className: className,
+      style: submenu.style,
+      role: "presentation"
+    }, submenu.label), items);
+  };
+  var createSeparator = function createSeparator(index) {
+    var key = 'separator_' + index;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
+      key: key,
+      className: "p-menu-separator",
+      role: "separator"
+    });
+  };
+  var createMenuItem = function createMenuItem(item, index) {
+    if (item.visible === false) {
+      return null;
+    }
+    var className = (0,primereact_utils__WEBPACK_IMPORTED_MODULE_6__.classNames)('p-menuitem', item.className);
+    var linkClassName = (0,primereact_utils__WEBPACK_IMPORTED_MODULE_6__.classNames)('p-menuitem-link', {
+      'p-disabled': item.disabled
+    });
+    var iconClassName = (0,primereact_utils__WEBPACK_IMPORTED_MODULE_6__.classNames)('p-menuitem-icon', item.icon);
+    var icon = primereact_utils__WEBPACK_IMPORTED_MODULE_6__.IconUtils.getJSXIcon(item.icon, {
+      className: 'p-menuitem-icon'
+    }, {
+      props: props
+    });
+    var label = item.label && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+      className: "p-menuitem-text"
+    }, item.label);
+    var tabIndex = item.disabled ? null : 0;
+    var key = item.label + '_' + index;
+    var content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
+      href: item.url || '#',
+      className: linkClassName,
+      role: "menuitem",
+      target: item.target,
+      onClick: function onClick(event) {
+        return onItemClick(event, item);
+      },
+      onKeyDown: function onKeyDown(event) {
+        return onItemKeyDown(event);
+      },
+      tabIndex: tabIndex,
+      "aria-disabled": item.disabled
+    }, icon, label);
+    if (item.template) {
+      var defaultContentOptions = {
+        onClick: function onClick(event) {
+          return onItemClick(event, item);
+        },
+        onKeyDown: function onKeyDown(event) {
+          return onItemKeyDown(event);
+        },
+        className: linkClassName,
+        tabIndex: tabIndex,
+        labelClassName: 'p-menuitem-text',
+        iconClassName: iconClassName,
+        element: content,
+        props: props
+      };
+      content = primereact_utils__WEBPACK_IMPORTED_MODULE_6__.ObjectUtils.getJSXElement(item.template, item, defaultContentOptions);
+    }
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
+      key: key,
+      className: className,
+      style: item.style,
+      role: "none"
+    }, content);
+  };
+  var createItem = function createItem(item, index) {
+    return item.separator ? createSeparator(index) : item.items ? createSubmenu(item, index) : createMenuItem(item, index);
+  };
+  var createMenu = function createMenu() {
+    return props.model.map(createItem);
+  };
+  var createElement = function createElement() {
+    if (props.model) {
+      var otherProps = primereact_utils__WEBPACK_IMPORTED_MODULE_6__.ObjectUtils.findDiffKeys(props, Menu.defaultProps);
+      var className = (0,primereact_utils__WEBPACK_IMPORTED_MODULE_6__.classNames)('p-menu p-component', {
+        'p-menu-overlay': props.popup
+      }, props.className);
+      var menuitems = createMenu();
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(primereact_csstransition__WEBPACK_IMPORTED_MODULE_2__.CSSTransition, {
+        nodeRef: menuRef,
+        classNames: "p-connected-overlay",
+        "in": visibleState,
+        timeout: {
+          enter: 120,
+          exit: 100
+        },
+        options: props.transitionOptions,
+        unmountOnExit: true,
+        onEnter: onEnter,
+        onEntered: onEntered,
+        onExit: onExit,
+        onExited: onExited
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", _extends({
+        ref: menuRef,
+        id: props.id,
+        className: className,
+        style: props.style
+      }, otherProps, {
+        onClick: onPanelClick
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("ul", {
+        className: "p-menu-list p-reset",
+        role: "menu"
+      }, menuitems)));
+    }
+    return null;
+  };
+  var element = createElement();
+  return props.popup ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(primereact_portal__WEBPACK_IMPORTED_MODULE_5__.Portal, {
+    element: element,
+    appendTo: props.appendTo
+  }) : element;
+}));
+Menu.displayName = 'Menu';
+Menu.defaultProps = {
+  __TYPE: 'Menu',
+  id: null,
+  model: null,
+  popup: false,
+  style: null,
+  className: null,
+  autoZIndex: true,
+  baseZIndex: 0,
+  appendTo: null,
+  transitionOptions: null,
+  onShow: null,
+  onHide: null
+};
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/primereact/overlayservice/overlayservice.esm.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/primereact/overlayservice/overlayservice.esm.js ***!
@@ -14037,7 +14400,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../contexts */ "./resources/js/components/contexts/index.js");
 /* harmony import */ var _utils_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/index.js */ "./resources/js/components/utils/index.js");
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../config */ "./resources/js/components/config/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var primereact_menu__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! primereact/menu */ "./node_modules/primereact/menu/menu.esm.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -14064,6 +14428,78 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
+var ParticipantRow = function ParticipantRow(_ref) {
+  var participant = _ref.participant,
+    onAllow = _ref.onAllow,
+    onBlock = _ref.onBlock,
+    onDelete = _ref.onDelete;
+  var menuRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Use useRef to initialize the menu reference
+
+  var getStatusColor = function getStatusColor(status) {
+    switch (status) {
+      case 'active':
+        return '#007bff';
+      // Primary (blue)
+      case 'disenrolled':
+        return '#dc3545';
+      // Danger (red)
+      case 'pending':
+        return '#ffc107';
+      // Warning (yellow)
+      default:
+        return '#6c757d';
+      // Default (gray)
+    }
+  };
+  var menuItems = [{
+    label: 'Allow',
+    icon: 'pi pi-check',
+    style: {
+      color: getStatusColor(participant.status)
+    },
+    // Set icon color dynamically
+    command: function command() {
+      return onAllow(participant);
+    }
+  }, {
+    label: 'Disenroll',
+    icon: 'pi pi-ban',
+    style: {
+      color: getStatusColor(participant.status)
+    },
+    // Set icon color dynamically
+    command: function command() {
+      return onBlock(participant);
+    }
+  }, {
+    label: 'Delete',
+    icon: 'pi pi-trash',
+    style: {
+      color: getStatusColor(participant.status)
+    },
+    // Set icon color dynamically
+    command: function command() {
+      return onDelete(participant);
+    }
+  }];
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    className: "participant-row",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      children: participant.name
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_menu__WEBPACK_IMPORTED_MODULE_10__.Menu, {
+      model: menuItems,
+      popup: true,
+      ref: menuRef
+    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      icon: "pi pi-ellipsis-v",
+      className: "p-button-rounded p-button-text",
+      onClick: function onClick(event) {
+        return menuRef.current.toggle(event);
+      } // Use menuRef.current to access the menu
+    })]
+  });
+};
 var Participants = function Participants() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
@@ -14076,69 +14512,85 @@ var Participants = function Participants() {
   var _useGlobalContext = (0,_contexts__WEBPACK_IMPORTED_MODULE_7__.useGlobalContext)(),
     setLoading = _useGlobalContext.setLoading,
     confirmDialog = _useGlobalContext.confirmDialog;
+  var isMounted = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(true); // Track if the component is mounted
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    console.log("Hello Participant");
+    isMounted.current = true; // Set mounted to true
     getParticipants();
+    return function () {
+      isMounted.current = false; // Set mounted to false on unmount
+    };
   }, []);
   var getParticipants = function getParticipants() {
     setLoading(true);
     (0,_api_ParticipantAPI_js__WEBPACK_IMPORTED_MODULE_6__.getParticipantsApi)().then(function (res) {
-      setParticipants(res.data);
+      if (isMounted.current) {
+        setParticipants(res.data); // Update state only if the component is mounted
+      }
     })["catch"](function (err) {
-      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+      if (isMounted.current) {
+        (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+      }
     })["finally"](function () {
-      return setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     });
   };
   var handleAllow = function handleAllow(participant) {
     setLoading(true);
     var id = participant.id;
     (0,_api_ParticipantAPI_js__WEBPACK_IMPORTED_MODULE_6__.allowParticipantApi)(id).then(function (res) {
-      console.log(res);
-      if (res.status === true) {
-        // Update the participant's status in the state
+      if (isMounted.current && res.status === true) {
         setParticipants(function (prevParticipants) {
           return prevParticipants.map(function (p) {
             return p.id === id ? _objectSpread(_objectSpread({}, p), {}, {
-              status: 'active'
+              status: 'Active'
             }) : p;
           });
         });
         (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_success)(res.message);
-      } else {
+      } else if (isMounted.current) {
         (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(res.message, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
       }
     })["catch"](function (err) {
-      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+      if (isMounted.current) {
+        (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+      }
     })["finally"](function () {
-      return setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     });
   };
   var handleBlock = function handleBlock(participant) {
     setLoading(true);
     var id = participant.id;
     (0,_api_ParticipantAPI_js__WEBPACK_IMPORTED_MODULE_6__.blockParticipantApi)(id).then(function (res) {
-      if (res.status === true) {
-        // Update the participant's status in the state
+      if (isMounted.current && res.status === true) {
         setParticipants(function (prevParticipants) {
           return prevParticipants.map(function (p) {
             return p.id === id ? _objectSpread(_objectSpread({}, p), {}, {
-              status: 'block'
+              status: 'Disenrolled'
             }) : p;
           });
         });
         (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_success)(res.message);
-      } else {
+      } else if (isMounted.current) {
         (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(res.message, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
       }
     })["catch"](function (err) {
-      (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+      if (isMounted.current) {
+        (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+      }
     })["finally"](function () {
-      return setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     });
   };
   var handleDelete = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(participant) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(participant) {
       var isDelete, id;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -14156,7 +14608,7 @@ var Participants = function Participants() {
             setLoading(true);
             id = participant.id;
             (0,_api_ParticipantAPI_js__WEBPACK_IMPORTED_MODULE_6__.deleteParticipantApi)(id).then(function (res) {
-              if (res.status === true) {
+              if (isMounted.current && res.status === true) {
                 // Remove the participant from the state
                 setParticipants(function (prevParticipants) {
                   return prevParticipants.filter(function (p) {
@@ -14164,13 +14616,17 @@ var Participants = function Participants() {
                   });
                 });
                 (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_success)(res.message);
-              } else {
+              } else if (isMounted.current) {
                 (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(res.message, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
               }
             })["catch"](function (err) {
-              (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+              if (isMounted.current) {
+                (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_8__.toast_error)(err, _config__WEBPACK_IMPORTED_MODULE_9__._ERROR_CODES.NETWORK_ERROR);
+              }
             })["finally"](function () {
-              return setLoading(false);
+              if (isMounted.current) {
+                setLoading(false);
+              }
             });
           case 8:
           case "end":
@@ -14179,13 +14635,13 @@ var Participants = function Participants() {
       }, _callee);
     }));
     return function handleDelete(_x) {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h3", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h3", {
       children: "Participants"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(primereact_datatable__WEBPACK_IMPORTED_MODULE_1__.DataTable, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(primereact_datatable__WEBPACK_IMPORTED_MODULE_1__.DataTable, {
       value: participants,
       responsiveLayout: "scroll",
       stripedRows: true,
@@ -14204,21 +14660,21 @@ var Participants = function Participants() {
         }
       },
       header: function header() {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
           className: "d-flex",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("button", {
             onClick: getParticipants,
             className: "btn btn-default",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("i", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
               className: "fa fa-refresh"
             }), " Reload"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
             className: "ms-auto p-2",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("span", {
               className: "p-input-icon-left",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("i", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
                 className: "pi pi-search"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_inputtext__WEBPACK_IMPORTED_MODULE_3__.InputText, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_inputtext__WEBPACK_IMPORTED_MODULE_3__.InputText, {
                 value: query,
                 onChange: function onChange(e) {
                   return setQuery(e.target.value);
@@ -14229,54 +14685,39 @@ var Participants = function Participants() {
           })]
         });
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
         header: "No",
         field: "no",
         sortable: true
-      }, "no"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+      }, "no"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
         header: "ParticipantID",
         field: "userID",
         sortable: true
-      }, "userID"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+      }, "userID"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
         header: "Status",
         field: "status",
         body: function body(rowData) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
-            className: "".concat(rowData.status === 'active' ? 'bg-primary text-white' : rowData.status === 'block' ? 'bg-danger text-white' : 'bg-warning text-white', " px-2 py-1 rounded"),
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+            className: "".concat(rowData.status === 'Active' ? 'bg-primary text-white' : rowData.status === 'Disenrolled' ? 'bg-danger text-white' : 'bg-warning text-white', " px-2 py-1 rounded"),
             children: rowData.status
           });
         },
         sortable: true
-      }, "status"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+      }, "status"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
         header: "RegisteredTime",
         field: "created_at",
         sortable: true
-      }, "created_at"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
+      }, "created_at"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(primereact_column__WEBPACK_IMPORTED_MODULE_2__.Column, {
         header: "Actions",
         body: function body(rowData) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
-            className: "table-action",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
-              label: "Allow",
-              className: "p-button-rounded p-button-primary m-1",
-              onClick: function onClick() {
-                return handleAllow(rowData);
-              }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
-              label: "Block",
-              className: "p-button-rounded p-button-danger m-1",
-              onClick: function onClick() {
-                return handleBlock(rowData);
-              }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(primereact_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
-              label: "Delete",
-              className: "p-button-rounded p-button-secondary m-1",
-              onClick: function onClick() {
-                return handleDelete(rowData);
-              }
-            })]
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(ParticipantRow, {
+            participant: rowData,
+            onAllow: handleAllow,
+            onBlock: handleBlock,
+            onDelete: handleDelete
           });
-        }
+        },
+        className: "p-column-header-actions" // Add class for styling
       }, "actions")]
     })]
   });

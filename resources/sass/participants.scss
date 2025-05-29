@@ -1,0 +1,78 @@
+/* Narrow the Actions column */
+.p-datatable .p-column-header-actions {
+    width: 80px !important; /* Force the width adjustment */
+}
+
+/* Style the three-dot icon button */
+.p-button-rounded.p-button-text {
+    color: #007bff !important; /* Force the color change */
+    background-color: transparent !important; /* Ensure no background color */
+    border: none !important; /* Remove border */
+    font-size: 1.2rem !important; /* Increase the size for better visibility */
+    cursor: pointer !important;
+}
+
+.p-button-rounded.p-button-text:hover {
+    color: #0056b3 !important; /* Darker color on hover */
+}
+
+/* Style the button with specific classes */
+.p-button.p-component.p-button-rounded.p-button-text.p-button-icon-only {
+    color: #007bff !important; /* Default blue color */
+    background-color: #e9ecef !important; /* Transparent background */
+    border: none !important; /* Remove border */
+    font-size: 1.2rem !important; /* Increase icon size for better visibility */
+    cursor: pointer !important; /* Change cursor to pointer */
+}
+
+/* Hover effect for the button */
+.p-button.p-component.p-button-rounded.p-button-text.p-button-icon-only:hover {
+    color: #0056b3 !important; /* Darker blue color on hover */
+    background-color: #bad6f1 !important; /* Light gray background on hover */
+    border-radius: 50% !important; /* Ensure rounded corners */
+}
+
+/* Active state for the button */
+.p-button.p-component.p-button-rounded.p-button-text.p-button-icon-only:active {
+    color: #ffffff !important; /* White color for active state */
+    background-color: #007bff !important; /* Blue background for active state */
+}
+
+/* Style the Menu container */
+.p-menu {
+    background-color: #f8f9fa !important; /* Light gray background */
+    border: 1px solid #dee2e6 !important; /* Border color */
+    border-radius: 5px !important; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow */
+}
+
+/* Style individual menu items */
+.p-menuitem {
+    color: #007bff !important; /* Blue text color */
+    font-weight: 500 !important; /* Slightly bold text */
+    padding: 10px 15px !important; /* Add padding for better spacing */
+    cursor: pointer !important; /* Change cursor to pointer */
+}
+
+/* Hover effect for menu items */
+.p-menuitem:hover {
+    background-color: #e9ecef !important; /* Light gray hover background */
+    color: #0056b3 !important; /* Darker blue text color */
+}
+
+/* Style the menu icons */
+.p-menuitem-icon {
+    color: #007bff !important; /* Blue icon color */
+    margin-right: 10px !important; /* Add spacing between icon and text */
+}
+
+/* Ensure dynamic colors are applied */
+.p-menuitem-icon[style] {
+    color: inherit !important; /* Inherit color from inline styles */
+}
+
+/* Style the active menu item (if applicable) */
+.p-menuitem-active {
+    background-color: #007bff !important; /* Blue background for active item */
+    color: #ffffff !important; /* White text color */
+}

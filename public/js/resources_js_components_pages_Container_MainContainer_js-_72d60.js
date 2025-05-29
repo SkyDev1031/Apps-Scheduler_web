@@ -4151,7 +4151,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assets__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets */ "./resources/js/components/assets/index.js");
 /* harmony import */ var _SideNavbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SideNavbar */ "./resources/js/components/components/SideNavbar.js");
 /* harmony import */ var _HeaderNavbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderNavbar */ "./resources/js/components/components/HeaderNavbar.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
 /* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./resources/js/components/contexts/index.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils */ "./resources/js/components/utils/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -4160,8 +4159,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
+ // Import logoutUser from the utils file
 
 function Header(_ref) {
   var isSubItem = _ref.isSubItem,
@@ -4172,6 +4170,12 @@ function Header(_ref) {
     isAdmin = _useGlobalContext.isAdmin,
     holdings = _useGlobalContext.holdings;
   var _role_prefix = isAdmin ? '/admin' : '/user';
+  var toggleSidebar = function toggleSidebar() {
+    // const sidebar = document.querySelector('.header-section');
+    // if (sidebar) {
+    //     sidebar.classList.toggle('body-collapse');
+    // }
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     className: "".concat(isSubItem ? 'no-border' : ''),
     id: "site_header",
@@ -4183,59 +4187,24 @@ function Header(_ref) {
           className: "container-fruid",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "row d-flex header-area ml-0 mr-0",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               className: "navbar-area",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "d-flex align-items-center justify-content-between",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "sidebar-icon",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                    src: _assets__WEBPACK_IMPORTED_MODULE_1__.IMAGES.ic_menu,
-                    alt: "icon"
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("form", {
-                  action: "#",
-                  className: "flex-fill",
-                  id: "search-form-area",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                    className: "form-group d-flex align-items-center",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                      src: _assets__WEBPACK_IMPORTED_MODULE_1__.IMAGES.ic_search,
-                      alt: "icon"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
-                      type: "text",
-                      placeholder: "Type to search..."
-                    })]
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_HeaderNavbar__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                  isAdmin: isAdmin,
-                  user: user,
-                  holdings: holdings,
-                  _role_prefix: _role_prefix,
-                  logoutUser: _utils__WEBPACK_IMPORTED_MODULE_5__.logoutUser
-                })]
-              }), isSubItem && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                className: "tab-main",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("ul", {
-                  className: "nav nav-tabs",
-                  children: subNav.items.map(function (item, index) {
-                    var link = "".concat(_role_prefix, "/").concat(subNav.prefix).concat(item.link);
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
-                      className: "nav-item",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Link, {
-                        to: link,
-                        className: "nav-link ".concat(location === link ? 'active' : ''),
-                        children: item.label
-                      })
-                    }, index);
-                  })
-                })
-              })]
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_HeaderNavbar__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                isAdmin: isAdmin,
+                user: user,
+                holdings: holdings,
+                _role_prefix: _role_prefix,
+                logoutUser: _utils__WEBPACK_IMPORTED_MODULE_5__.logoutUser,
+                isSubItem: isSubItem,
+                subNav: subNav,
+                location: location
+              })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_SideNavbar__WEBPACK_IMPORTED_MODULE_2__["default"], {
               isAdmin: isAdmin,
               user: user,
               location: location,
-              _role_prefix: _role_prefix
+              _role_prefix: _role_prefix,
+              toggleSidebar: toggleSidebar
             })]
           })
         })
@@ -4280,88 +4249,82 @@ var HeaderNavbar = function HeaderNavbar(_ref) {
     holdings = _ref.holdings,
     onAction = _ref.onAction,
     logoutUser = _ref.logoutUser,
-    _role_prefix = _ref._role_prefix;
+    _role_prefix = _ref._role_prefix,
+    isSubItem = _ref.isSubItem,
+    subNav = _ref.subNav,
+    location = _ref.location;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     isDropdownVisible = _useState2[0],
     setDropdownVisible = _useState2[1];
+  var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Reference for the dropdown area
+  var avatarRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Reference for the avatar area
+
   var toggleDropdown = function toggleDropdown() {
     setDropdownVisible(!isDropdownVisible);
   };
+  var handleClickOutside = function handleClickOutside(event) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target) && avatarRef.current && !avatarRef.current.contains(event.target)) {
+      setDropdownVisible(false); // Close dropdown if clicked outside both dropdown and avatar
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // Add event listener for clicks outside the dropdown
+    document.addEventListener('mousedown', handleClickOutside);
+    return function () {
+      // Cleanup event listener on component unmount
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "header-navbar",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "header-navbar__notifications",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        className: "header-navbar__notifications-icon ".concat(holdings.length > 0 ? 'header-navbar__notifications--new' : ''),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
-          src: _assets__WEBPACK_IMPORTED_MODULE_2__.IMAGES.ic_bell,
-          className: "header-navbar__bell-icon",
-          alt: "Notifications"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "header-navbar__notifications-dropdown",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "header-navbar__notifications-header d-flex justify-content-between",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h5", {
-            children: "Notifications"
-          }), holdings.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-            className: "header-navbar__badge",
-            children: 1
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ul", {
-          children: holdings.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("a", {
-              href: "/user/packages",
-              className: "header-navbar__notification-item d-flex",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                className: "header-navbar__notification-avatar",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
-                  src: _assets__WEBPACK_IMPORTED_MODULE_2__.IMAGES.avatar,
-                  className: "header-navbar__notification-img",
-                  alt: "Notification"
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                className: "header-navbar__notification-text",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-                  children: "You have holding amount. Please buy a package to receive the holding amount."
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-              className: "fa-solid fa-caret-right"
-            })]
-          })
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("form", {
+      action: "#",
+      className: "header-navbar__search-form flex-fill",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "form-group d-flex align-items-center",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+          src: _assets__WEBPACK_IMPORTED_MODULE_2__.IMAGES.ic_search,
+          alt: "Search Icon"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+          type: "text",
+          placeholder: "Type to search..."
         })]
-      })]
+      })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "header-navbar__user",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        ref: avatarRef // Attach reference to the avatar
+        ,
         className: "header-navbar__profile",
         onClick: toggleDropdown,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
           className: "header-navbar__avatar",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(primereact_avatar__WEBPACK_IMPORTED_MODULE_1__.Avatar, {
             image: _assets__WEBPACK_IMPORTED_MODULE_2__.IMAGES.avatar,
-            size: "small"
+            size: "large"
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
           className: "fa-solid fa-sort-down header-navbar__dropdown-icon"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        ref: dropdownRef // Attach reference to the dropdown
+        ,
         className: "header-navbar__dropdown ".concat(isDropdownVisible ? 'header-navbar__dropdown--visible' : 'header-navbar__dropdown--hidden'),
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "header-navbar__dropdown-header d-flex align-items-center",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "header-navbar__dropdown-avatar",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
-              src: _assets__WEBPACK_IMPORTED_MODULE_2__.IMAGES.avatar,
-              alt: "User"
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(primereact_avatar__WEBPACK_IMPORTED_MODULE_1__.Avatar, {
+              image: _assets__WEBPACK_IMPORTED_MODULE_2__.IMAGES.avatar,
+              alt: "US",
+              size: "large"
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "header-navbar__dropdown-info",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
               href: "#",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h5", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h6", {
                 children: user.ScreenName || ''
               })
             })
@@ -4400,6 +4363,22 @@ var HeaderNavbar = function HeaderNavbar(_ref) {
           })]
         })]
       })]
+    }), isSubItem && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "header-navbar__tabs",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ul", {
+        className: "nav nav-tabs",
+        children: subNav.items.map(function (item, index) {
+          var link = "".concat(_role_prefix, "/").concat(subNav.prefix).concat(item.link);
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
+            className: "nav-item",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
+              to: link,
+              className: "nav-link ".concat(location === link ? 'active' : ''),
+              children: item.label
+            })
+          }, index);
+        })
+      })
     })]
   });
 };

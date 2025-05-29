@@ -1,80 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { Avatar } from 'primereact/avatar';
 import { IMAGES } from "../assets";
 import { AdminProfileItem } from "../config";
 
-const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_prefix }) => {
+const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_prefix, isSubItem, subNav, location }) => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const dropdownRef = useRef(null); // Reference for the dropdown area
+    const avatarRef = useRef(null); // Reference for the avatar area
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);
     };
 
+    const handleClickOutside = (event) => {
+        if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target) &&
+            avatarRef.current &&
+            !avatarRef.current.contains(event.target)
+        ) {
+            setDropdownVisible(false); // Close dropdown if clicked outside both dropdown and avatar
+        }
+    };
+
+    useEffect(() => {
+        // Add event listener for clicks outside the dropdown
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Cleanup event listener on component unmount
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className="header-navbar">
-            {/* Notifications Section */}
-            <div className="header-navbar__notifications">
-                <div className={`header-navbar__notifications-icon ${holdings.length > 0 ? 'header-navbar__notifications--new' : ''}`}>
-                    <img
-                        src={IMAGES.ic_bell}
-                        className="header-navbar__bell-icon"
-                        alt="Notifications"
-                    />
+            {/* Search Form */}
+            <form action="#" className="header-navbar__search-form flex-fill">
+                <div className="form-group d-flex align-items-center">
+                    <img src={IMAGES.ic_search} alt="Search Icon" />
+                    <input type="text" placeholder="Type to search..." />
                 </div>
-                <div className="header-navbar__notifications-dropdown">
-                    <div className="header-navbar__notifications-header d-flex justify-content-between">
-                        <h5>Notifications</h5>
-                        {holdings.length > 0 && <span className="header-navbar__badge">{1}</span>}
-                    </div>
-                    <ul>
-                        {holdings.length > 0 &&
-                            <li>
-                                <a href="/user/packages" className="header-navbar__notification-item d-flex">
-                                    <div className="header-navbar__notification-avatar">
-                                        <img
-                                            src={IMAGES.avatar}
-                                            className="header-navbar__notification-img"
-                                            alt="Notification"
-                                        />
-                                    </div>
-                                    <div className="header-navbar__notification-text">
-                                        <p>
-                                            You have holding amount. Please buy a package to receive the holding amount.
-                                        </p>
-                                    </div>
-                                </a>
-                                <i className="fa-solid fa-caret-right" />
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
+            </form>
 
             {/* User Profile Section */}
             <div className="header-navbar__user">
                 {/* Avatar Click to Toggle Dropdown */}
                 <div
+                    ref={avatarRef} // Attach reference to the avatar
                     className="header-navbar__profile"
                     onClick={toggleDropdown}
                 >
                     <span className="header-navbar__avatar">
-                        <Avatar image={IMAGES.avatar} size="small" />
+                        <Avatar image={IMAGES.avatar} size="large" />
                     </span>
                     <i className="fa-solid fa-sort-down header-navbar__dropdown-icon" />
                 </div>
 
                 {/* Dropdown Menu */}
                 <div
+                    ref={dropdownRef} // Attach reference to the dropdown
                     className={`header-navbar__dropdown ${isDropdownVisible ? 'header-navbar__dropdown--visible' : 'header-navbar__dropdown--hidden'}`}
                 >
                     <div className="header-navbar__dropdown-header d-flex align-items-center">
                         <div className="header-navbar__dropdown-avatar">
-                            <img src={IMAGES.avatar} alt="User" />
+                            <Avatar image={IMAGES.avatar} alt="US" size="large" />
                         </div>
                         <div className="header-navbar__dropdown-info">
                             <a href="#">
-                                <h5>{user.ScreenName || ''}</h5>
+                                <h6>{user.ScreenName || ''}</h6>
                             </a>
                         </div>
                     </div>
@@ -103,6 +97,22 @@ const HeaderNavbar = ({ isAdmin, user, holdings, onAction, logoutUser, _role_pre
                     </ul>
                 </div>
             </div>
+
+            {/* Navigation Tabs */}
+            {isSubItem && (
+                <div className="header-navbar__tabs">
+                    <ul className="nav nav-tabs">
+                        {subNav.items.map((item, index) => {
+                            const link = `${_role_prefix}/${subNav.prefix}${item.link}`;
+                            return (
+                                <li key={index} className="nav-item">
+                                    <Link to={link} className={`nav-link ${location === link ? 'active' : ''}`}>{item.label}</Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 };

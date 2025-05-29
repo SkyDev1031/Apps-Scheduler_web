@@ -63,19 +63,4 @@ export const AdminProfileItem = [
         link: 'network-settings',
         icon: 'fa-network-wired',
     },
-    {
-        label: "Client Network",
-        link: 'client-network',
-        icon: 'fa-user',
-    },
-    {
-        label: "Run Binary Payout",
-        action: NavKeys.run_binary_payout,
-        icon: 'fa-credit-card',
-    },
-    {
-        label: "Non Referral Signups",
-        action: NavKeys.non_referral_signup,
-        icon: 'fa-user-plus',
-    },
 ]

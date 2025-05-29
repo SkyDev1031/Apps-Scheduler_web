@@ -69238,45 +69238,45 @@ var NavKeys = {
 var UserNavbar = [{
   label: "Dashboard",
   link: 'dashboard',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_dashboard
+  icon: 'fa-solid fa-chart-line' // Font Awesome icon for Dashboard
 }, {
   label: "Study Group",
   link: 'study',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_wallet
+  icon: 'fa-solid fa-users' // Font Awesome icon for Study Group
 }];
 var AdminNavbar = [{
   label: "Dashboard",
   link: 'dashboard',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_dashboard
+  icon: 'fa-solid fa-chart-line' // Font Awesome icon for Dashboard
 }, {
-  label: "UserManagement",
+  label: "User Management",
   link: 'users',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_ref
+  icon: 'fa-solid fa-user-group' // Font Awesome icon for User Management
 }, {
   label: "Participants",
   link: 'participants',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_ref
+  icon: 'fa-solid fa-user-check' // Font Awesome icon for Participants
 }, {
   label: "Report App Usage",
   prefix: 'reportApp',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_package
+  icon: 'fa-solid fa-mobile-screen-button' // Font Awesome icon for App Usage Report
 }, {
   label: "Report Phone Usage",
   prefix: 'reportPhone',
-  icon: _assets__WEBPACK_IMPORTED_MODULE_0__.IMAGES.ic_package
+  icon: 'fa-solid fa-phone' // Font Awesome icon for Phone Usage Report
 }];
 var AdminProfileItem = [{
   label: "Profile",
   link: 'profile',
-  icon: 'fa-user'
+  icon: 'fa-solid fa-user' // Font Awesome icon for Profile
 }, {
   label: "Settings",
   link: 'settings',
-  icon: 'fa-cog'
+  icon: 'fa-solid fa-cog' // Font Awesome icon for Settings
 }, {
   label: "Network Settings",
   link: 'network-settings',
-  icon: 'fa-network-wired'
+  icon: 'fa-solid fa-network-wired' // Font Awesome icon for Network Settings
 }];
 
 /***/ }),

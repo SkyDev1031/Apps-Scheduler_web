@@ -221,7 +221,7 @@ export const GlobalContextProvider = ({ children }) => {
     return (
         <GlobalContext.Provider
             value={{
-                user: _user || {}, isAdmin,
+                user: _user || {}, isAdmin, _token,
                 loading, setLoading, refreshUser,
                 onDeposit, onWithdraw,
                 conf2ndPwd, check2ndPassword,

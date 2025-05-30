@@ -10,7 +10,7 @@ import { getUsersNumber } from '../../api/OriginAPI.js';
 import { toast_error } from "../../utils";
 
 export default function dashboard() {
-    const { user, isAdmin, cryptos, setLoading, getInitialData, transactions, holdings } = useGlobalContext();
+    const { user, isAdmin, cryptos, setLoading, _token } = useGlobalContext();
     return (
         <div className="dashboard-container">
             <h2>Dashboard</h2>

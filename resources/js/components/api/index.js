@@ -2,8 +2,9 @@ import { method } from "lodash";
 import { getAuth, logoutUser } from "../utils";
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useGlobalContext } from "../contexts";
 
-export const _REQ_METHOD = { GET: 'GET', POST: 'POST', DELETE: 'DELETE' }
+export const _REQ_METHOD = { GET: 'GET', POST: 'POST', DELETE: 'DELETE', PUT: 'PUT' }
 
 export const _REQUEST_APP = (url, method, data) => {
     return new Promise((resolve, reject) => {
@@ -31,33 +32,84 @@ export const _REQUEST_APP = (url, method, data) => {
             .catch(err => reject(err)); // Reject with the error
     });
 }
-
-export const _REQUEST = (url, method, data) => {
+export const _REQUEST = (url, method, data = {}) => {
     return new Promise((resolve, reject) => {
-        // Map HTTP methods to Axios functions
-        const axiosMethods = {
-            GET: axios.get,
-            POST: axios.post,
-            PUT: axios.put,
-            DELETE: axios.delete,
-        };
-
-        // Ensure the method is valid
-        if (!axiosMethods[method]) {
-            return reject(new Error(`Unsupported HTTP method: ${method}`));
-        }
-
-        // Determine the request configuration
-        const requestConfig = {
-            ...(method === 'GET' ? { params: data } : { ...data }), // Use `params` for GET and `data` for others
-        };
-        console.log(`${window.location.origin}/api/${url}`)
-        // Make the request using the selected Axios method
-        axiosMethods[method](`${window.location.origin}/api/${url}`, requestConfig)
-            .then(res => resolve(res.data)) // Resolve with the response data
-            .catch(err => reject(err)); // Reject with the error
-    });
+      const axiosMethods = {
+        GET: axios.get,
+        POST: axios.post,
+        PUT: axios.put,
+        DELETE: axios.delete,
+      };
+  
+      if (!axiosMethods[method]) {
+        return reject(new Error(`Unsupported HTTP method: ${method}`));
+      }
+  
+      const auth = JSON.parse(localStorage.getItem('auth'));
+      const token = auth?.token;
+  
+      const headers = {
+        'Authorization': `Bearer ${token || ''}`,
+        'Content-Type': 'application/json',
+      };
+  
+      const baseUrl = `${window.location.origin}/api/${url}`;
+  
+      const config = { headers };
+  
+      if (method === 'GET') {
+        config.params = data;
+        axiosMethods[method](baseUrl, config)
+          .then(res => resolve(res.data))
+          .catch(err => reject(err.response?.data || { message: err.message }));
+      } else {
+        axiosMethods[method](baseUrl, data, config)
+          .then(res => resolve(res.data))
+        //   .catch(err => reject(err.response?.data || { message: err.message }));
+            .catch(err => {
+                // if (err.response?.status === 401) {
+                //     logoutUser(); // optional
+                // }
+                reject(err.response?.data || { message: err.message });
+            });
 }
+    });
+  };
+// export const _REQUEST = (url, method, data) => {
+
+//     return new Promise((resolve, reject) => {
+//         const axiosMethods = {
+//             GET: axios.get,
+//             POST: axios.post,
+//             PUT: axios.put,
+//             DELETE: axios.delete,
+//         };
+
+//         if (!axiosMethods[method]) {
+//             return reject(new Error(`Unsupported HTTP method: ${method}`));
+//         }
+
+//         const auth = JSON.parse(localStorage.getItem('auth'));
+//         const token = auth?.token;
+//         console.log("bearer_token ", token);
+//         const requestConfig = {
+//             headers: {
+//                 'Authorization': `Bearer ${token || ''}`, // Use the token from userInfo
+//                 'Content-Type': 'application/json'
+//             },
+//             ...(method === 'GET' ? { params: data } : { data }), // for POST/PUT/DELETE use `data`
+//         };
+
+//         axiosMethods[method](`${window.location.origin}/api/${url}`, requestConfig)
+//             .then(res => resolve(res.data))
+//             .catch(err => {
+//                 // if (err.response?.status === 401) {
+//                 //     logoutUser(); // optional
+//                 // }
+//                 reject(err.response?.data || { message: err.message });
+//             });
+//     });
+// };
 
 
 export const _REQUEST_ORIGIN = (url, method, data) => {

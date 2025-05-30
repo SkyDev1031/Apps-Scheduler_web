@@ -23,7 +23,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->group(function () {    
+    // study group management
+    Route::prefix('studies')->group(function () {
+        Route::get('/', [StudyController::class, 'index']);
+        Route::post('/', [StudyController::class, 'store']);
+        Route::get('/{study}', [StudyController::class, 'show']);
+        Route::put('/{study}', [StudyController::class, 'update']);
+        Route::delete('/{study}', [StudyController::class, 'destroy']);
+        
+        // // Study participants management
+        // Route::post('/{study}/participants', [StudyController::class, 'addParticipant']);
+        // Route::delete('/{study}/participants/{user}', [StudyController::class, 'removeParticipant']);
+    });
 
+    Route::prefix('study-requests')->group(function () {
+        Route::post('/',                [StudyParticipantRequestController::class, 'invite']);   // researcher
+        Route::post('/delete',         [StudyParticipantRequestController::class, 'cancel']);   // researcher
+    });
+    Route::prefix('my-invitations')->group(function () {
+        Route::get('/',                              [StudyParticipantRequestController::class, 'myInvitations']);
+        Route::post('{id}/approve',                  [StudyParticipantRequestController::class, 'approve']);
+        Route::post('{id}/decline',                  [StudyParticipantRequestController::class, 'decline']);
+    });
+    
 });
 
 
@@ -40,14 +62,7 @@ Route::post("/users/allow", [UserController::class, 'allowUser']);
 Route::post("/users/block", [UserController::class, 'blockUser']);
 Route::post("/users/delete", [UserController::class, 'deleteUser']);
 
-// study group management
-Route::post('study-requests',                [StudyParticipantRequestController::class, 'invite']);   // researcher
-Route::delete('study-requests/{id}',         [StudyParticipantRequestController::class, 'cancel']);   // researcher
-Route::prefix('my-invitations')->group(function () {
-    Route::get('/',                              [StudyParticipantRequestController::class, 'myInvitations']);
-    Route::post('{id}/approve',                  [StudyParticipantRequestController::class, 'approve']);
-    Route::post('{id}/decline',                  [StudyParticipantRequestController::class, 'decline']);
-});
+
 
 // AppUserController
 Route::prefix('/appusers')->group(function () {

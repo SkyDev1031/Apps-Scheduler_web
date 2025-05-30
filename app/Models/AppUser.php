@@ -23,7 +23,12 @@ class AppUser extends Model
     {
         return $this->belongsTo(Study::class);
     }
-
+    public function studies()
+    {
+        return $this->belongsToMany(Study::class, 'study_participant_requests', 'participant_id', 'study_id')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
     public function invitations()
     {
         return $this->hasMany(StudyParticipantRequest::class, 'participant_id');

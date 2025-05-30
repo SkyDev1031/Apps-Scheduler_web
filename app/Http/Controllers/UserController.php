@@ -22,13 +22,14 @@ class UserController extends Controller
         if (!$user || !Hash::check($password, $user->password)) $message = 'These credentials do not match our records.';
         else if ($user->status == 'Pending') $message = 'Your account activation is pending!';
         else if ($user->status == 'Suspended') $message = 'Your accont has been suspended! Please contact with administrator!';
+        else if ($user->status == 'Block') $message = 'Your accont has been suspended! Please contact with administrator!';
 
         if ($message) {
             return response(['message' => $message, 'success' => false], 200);
         }
         $ip = $request->ip();
 
-        $token = $user->createToken($user->id)->accessToken;
+        $token = $user->createToken('Personal Access Token')->accessToken;
         $userdata = array(
             'LoginIP' => $ip,
             'LoginStatus' => 1,

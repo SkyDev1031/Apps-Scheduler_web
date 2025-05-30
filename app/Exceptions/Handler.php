@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -38,4 +39,16 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function unauthenticated($request, AuthenticationException $exception)
+{
+    if ($request->expectsJson() || $request->is('api/*')) {
+        return response()->json([
+            'message' => 'Your personal access token expired',
+            'logout' => true,
+            'success' => false
+        ], 401); // use 401 for unauthorized
+    }
+
+    return redirect()->guest(route('login'));
+}
 }

@@ -9,42 +9,75 @@ use App\Models\AppUser;
 
 class StudyParticipantRequestController extends Controller
 {
-    // POST /api/study-requests
     public function invite(Request $request)
     {
         $data = $request->validate([
             'study_id'       => 'required|exists:studies,id',
             'participant_id' => 'required|exists:appusers,id',
         ]);
-
+    
         $study = Study::findOrFail($data['study_id']);
-
-        // (optional) check that the auth user owns this study
+    
+        // Make sure the authenticated user owns the study
         abort_unless($study->researcher_id === $request->user()->id, 403);
-
-        $invite = StudyParticipantRequest::firstOrCreate(
+    
+        // Try to find or create the invite
+        [$invite, $created] = StudyParticipantRequest::firstOrCreate(
             $data,
-            ['status' => 'pending']
+            ['status' => 'Pending']
+        )->wasRecentlyCreated
+            ? [$invite = StudyParticipantRequest::where($data)->first(), true]
+            : [$invite = StudyParticipantRequest::where($data)->first(), false];
+    
+        // Optionally trigger notification here
+        // Notification::send($invite->participant, new StudyInviteNotification($invite));
+    
+        if ($created) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Invite sent successfully.',
+                'invite' => $invite,
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => 'duplicate',
+                'message' => 'This participant has already been invited to this study.',
+                'invite' => $invite,
+            ], 200);
+        }
+    }
+    
+    public function cancel(Request $request)
+    {
+        // 1. Validate the incoming study & participant IDs
+        $data = [
+            'study_id'       => $request->study_id,
+            'participant_id' => $request->participant_id
+        ];
+
+        // 2. Locate the invite that matches BOTH ids
+        $invite = StudyParticipantRequest::where($data)->firstOrFail();
+        // print_r($invite);
+        if (!$invite) {
+            return response()->json(['message' => 'No matching invite found.'], 404);
+        }
+        // 3. Make sure the caller owns the study
+        abort_unless(
+            $invite->study->researcher_id === $request->user()->id, 
+            403, 
+            'Unauthorized'
         );
 
-        // 🔔 push notification to participant (FCM or Laravel Echo)
-        // Notification::send($invite->participant, new StudyInviteNotification($invite));
+        // // 4. (Optional) only allow cancelling if still pending
+        // abort_if(
+        //     $invite->status !== 'pending',
+        //     400,
+        //     'Cannot cancel processed invite'
+        // );
 
-        return response()->json($invite, 201);
-    }
+        $invite->delete();
 
-    // DELETE /api/study-requests/{id}  (cancel)
-    public function cancel($id)
-    {
-        $invite = StudyParticipantRequest::findOrFail($id);
-        abort_unless($invite->study->researcher_id === auth()->id(), 403);
-
-        if ($invite->status === 'pending') {
-            $invite->delete();
-            return response()->noContent();
-        }
-
-        return response()->json(['message' => 'Cannot cancel processed invite'], 400);
+        return response()->json(['message' => 'deleted successfully.'], 200);
     }
 
     /* ───────────────────────────── PARTICIPANT SIDE ────────────────────────── */
@@ -76,7 +109,7 @@ class StudyParticipantRequestController extends Controller
                                          ->findOrFail($id);
 
         $invite->update(['status' => 'approved']);
-        $invite->participant->update(['study_id' => $invite->study_id]);
+        // $invite->participant->update(['study_id' => $invite->study_id]);
 
         // 🔔 notify researcher
         // Notification::send($invite->study->researcher, new InviteStatusNotification($invite));

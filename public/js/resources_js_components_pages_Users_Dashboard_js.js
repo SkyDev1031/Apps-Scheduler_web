@@ -29951,9 +29951,7 @@ function dashboard() {
     isAdmin = _useGlobalContext.isAdmin,
     cryptos = _useGlobalContext.cryptos,
     setLoading = _useGlobalContext.setLoading,
-    getInitialData = _useGlobalContext.getInitialData,
-    transactions = _useGlobalContext.transactions,
-    holdings = _useGlobalContext.holdings;
+    _token = _useGlobalContext._token;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
     className: "dashboard-container",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h2", {

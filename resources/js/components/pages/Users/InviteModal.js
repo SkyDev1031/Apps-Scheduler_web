@@ -46,7 +46,7 @@ export default function InviteModal({ open, onClose, studyId, onInvited }) {
         else {
             toast_error(res?.message);
         }
-        onInvited(); // refresh list in StudyManagement
+        onInvited(res?.invite.participant); // refresh list in StudyManagement
         onClose();
     };
 

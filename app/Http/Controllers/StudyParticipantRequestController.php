@@ -77,7 +77,7 @@ class StudyParticipantRequestController extends Controller
 
         $invite->delete();
 
-        return response()->json(['message' => 'deleted successfully.'], 200);
+        return response()->json(['message' => 'deleted successfully.', 'invite' => $invite], 200);
     }
 
     /* ───────────────────────────── PARTICIPANT SIDE ────────────────────────── */

@@ -26,37 +26,6 @@ export const GlobalContextProvider = ({ children }) => {
     const [buy_credits, setBuyCredits] = useState(0);
     const [sellerId, setSellerId] = useState({});
 
-    // useEffect(() => {
-    //     web3.eth.defaultAccount = account;
-    //     getInitialData();
-    //     const interval = setInterval(getInitialData, 30 * 1000);
-    //     return () => clearInterval(interval)
-    // }, [])
-
-    // const getInitialData = async (isLoading = false) => {
-    //     return new Promise(async (resolve) => {
-    //         if (isLoading) setLoading(true);
-    //         try {
-    //             if (!_token) return resolve(false)
-    //             var res = await getCryptosApi().catch(err => console.log(err));
-    //             setCryptos(res?.data || []);
-    //             res = await getSettingsApi().catch(err => console.log(err));
-    //             setSettings(res?.settings || {});
-    //             res = await getContractsApi().catch(err => console.log(err));
-    //             setContracts(res?.data || []);
-    //             setActiveContracts((res?.data || []).filter(item => item.actived == 1));
-    //             res = await getTransactionApi().catch(err => console.log(err));
-    //             setTransactions(res?.data || [])
-    //             setHoldings(res?.holding || [])
-    //             resolve(true);
-    //         } catch (error) {
-    //             resolve(false)
-    //         } finally {
-    //             if (isLoading) setLoading(false);
-    //         }
-    //     })
-    // }
-
     const check2ndPassword = async (pwd) => {
         if (!pwd) {
             toast_error("Put your secondary password", _ERROR_CODES.INVALID_INPUT);

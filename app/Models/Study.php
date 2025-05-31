@@ -40,4 +40,11 @@ class Study extends Model
                     ->where('type', 'join') // or 'invite' if you’re using that
                     ->with('participant');  // eager load the participant (AppUser)
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($study) {
+            $study->invitations()->delete();
+        });
+    }
 }

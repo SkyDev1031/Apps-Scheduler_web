@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import {
   Button,
   Typography,
-  CircularProgress,
   Box,
 } from '@mui/material';
 
@@ -13,7 +12,8 @@ import { useGlobalContext } from "../../contexts";
 import {
   createStudy,
   getStudies,
-  removeParticipant,
+  cancelInviteParticipant,
+  deleteStudy
 } from '../../api/StudyAPI';
 
 import { toast_error, toast_success } from '../../utils';
@@ -23,20 +23,19 @@ export default function StudyManagement() {
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [selectedStudyId, setSelectedStudyId] = useState(null);
   const [studies, setStudies] = useState([]);
-  const { setLoading, confirmDialog } = useGlobalContext();
+  const { setLoading, confirmDialog, user } = useGlobalContext();
 
   const fetchStudies = async () => {
     setLoading(true);
     try {
-      const res = await getStudies();
-      const data = res.data
-      console.log('Fetched studies:', data);
+      const res = await getStudies(user.id);
+      const data = res.data;
       if (Array.isArray(data)) {
         setStudies(data);
       } else if (data && Array.isArray(data.studies)) {
-        setStudies(data.studies); // Adjust depending on your API response
+        setStudies(data.studies);
       } else {
-        setStudies([]); // fallback to empty array to prevent .map crash
+        setStudies([]);
         toast_error('Unexpected response from server');
       }
     } catch (err) {
@@ -45,7 +44,6 @@ export default function StudyManagement() {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchStudies();
@@ -53,10 +51,15 @@ export default function StudyManagement() {
 
   const handleCreateStudyGroup = async (formData) => {
     try {
-      await createStudy(formData);
+      const response = await createStudy(formData);
+      const newStudy = response.data?.study;
+      if (newStudy) {
+        setStudies(prev => [newStudy, ...prev]);
+      } else {
+        fetchStudies(); // fallback
+      }
       toast_success('Study group created successfully!');
       setModalOpen(false);
-      fetchStudies();
     } catch (error) {
       console.error('Failed to create study:', error);
       toast_error('Failed to create study group');
@@ -71,26 +74,64 @@ export default function StudyManagement() {
   const handleRemoveParticipant = async (studyId, participantId) => {
     const isDelete = await confirmDialog();
     if (!isDelete) return;
+  
     setLoading(true);
     try {
-      const res = await removeParticipant({study_id: studyId, participant_id: participantId});
-      // console.log(res)
-      toast_success('Participant removed');
-      fetchStudies();
-      setLoading(false);
+      const res = await cancelInviteParticipant({
+        study_id: studyId,
+        participant_id: participantId,
+      });
+  
+      setStudies(prev =>
+        prev.map(study =>
+          study.id === studyId
+            ? {
+                ...study,
+                invitations: study.invitations?.filter(
+                  inv => inv.participant?.id !== participantId
+                ),
+              }
+            : study
+        )
+      );
+  
+      toast_success('Participant removed from this study group');
     } catch (err) {
+      console.error(err);
       toast_error('Failed to remove participant');
+    } finally {
+      setLoading(false);
+    }
+  };
+    
+  const handleDeleteStudy = async (studyId) => {
+    setLoading(true);
+    try {
+      await deleteStudy(studyId);
+      setStudies(prev => prev.filter(study => study.id !== studyId));
+      toast_success("Study Group deleted successfully");
+    } catch (err) {
+      toast_error("Something went wrong while deleting study group");
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteStudy = (studyId) => {
-    console.log('Delete study:', studyId);
-  }
+  const handleStudyUpdated = (updatedStudy) => {
+    setInviteModalOpen(false);
+    if (updatedStudy) {
+      setStudies(prev =>
+        prev.map(study => (study.id === updatedStudy.id ? updatedStudy : study))
+      );
+    } else {
+      fetchStudies(); // fallback if no data
+    }
+  };
 
   const handleViewStudy = (studyId) => {
     console.log('View study:', studyId);
-  }
+    // You can implement routing or detail view here
+  };
 
   return (
     <Box sx={{ p: 4 }}>
@@ -106,21 +147,19 @@ export default function StudyManagement() {
         New Study Group
       </Button>
 
-      {(
-        studies.length === 0 ? (
-          <Typography>No study groups found.</Typography>
-        ) : (
-          studies.map((study) => (
-            <StudyCard
-              key={study.id}
-              study={study}
-              onInviteClick={handleInviteClick}
-              onRemoveParticipant={handleRemoveParticipant}
-              onDeleteStudyClick={handleDeleteStudy}
-              onViewStudyClick={handleViewStudy}
-            />
-          ))
-        )
+      {studies.length === 0 ? (
+        <Typography>No study groups found.</Typography>
+      ) : (
+        studies.map((study) => (
+          <StudyCard
+            key={study.id}
+            study={study}
+            onInviteClick={handleInviteClick}
+            onRemoveParticipant={handleRemoveParticipant}
+            onDeleteStudyClick={handleDeleteStudy}
+            onViewStudyClick={handleViewStudy}
+          />
+        ))
       )}
 
       <MuiStudyGroupModal
@@ -133,7 +172,7 @@ export default function StudyManagement() {
         open={inviteModalOpen}
         onClose={() => setInviteModalOpen(false)}
         studyId={selectedStudyId}
-        onInvited={fetchStudies}
+        onInvited={handleStudyUpdated} // should pass updated study from modal
       />
     </Box>
   );

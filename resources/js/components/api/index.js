@@ -34,47 +34,54 @@ export const _REQUEST_APP = (url, method, data) => {
 }
 export const _REQUEST = (url, method, data = {}) => {
     return new Promise((resolve, reject) => {
-      const axiosMethods = {
-        GET: axios.get,
-        POST: axios.post,
-        PUT: axios.put,
-        DELETE: axios.delete,
-      };
-  
-      if (!axiosMethods[method]) {
-        return reject(new Error(`Unsupported HTTP method: ${method}`));
-      }
-  
-      const auth = JSON.parse(localStorage.getItem('auth'));
-      const token = auth?.token;
-  
-      const headers = {
-        'Authorization': `Bearer ${token || ''}`,
-        'Content-Type': 'application/json',
-      };
-  
-      const baseUrl = `${window.location.origin}/api/${url}`;
-  
-      const config = { headers };
-  
-      if (method === 'GET') {
-        config.params = data;
-        axiosMethods[method](baseUrl, config)
-          .then(res => resolve(res.data))
-          .catch(err => reject(err.response?.data || { message: err.message }));
-      } else {
-        axiosMethods[method](baseUrl, data, config)
-          .then(res => resolve(res.data))
-        //   .catch(err => reject(err.response?.data || { message: err.message }));
-            .catch(err => {
-                // if (err.response?.status === 401) {
-                //     logoutUser(); // optional
-                // }
-                reject(err.response?.data || { message: err.message });
-            });
-}
+        const axiosMethods = {
+            GET: axios.get,
+            POST: axios.post,
+            PUT: axios.put,
+            DELETE: axios.delete,
+        };
+
+        if (!axiosMethods[method]) {
+            return reject(new Error(`Unsupported HTTP method: ${method}`));
+        }
+
+        const auth = JSON.parse(localStorage.getItem('auth'));
+        const token = auth?.token;
+
+        const headers = {
+            'Authorization': `Bearer ${token || ''}`,
+            'Content-Type': 'application/json',
+        };
+
+        const baseUrl = `${window.location.origin}/api/${url}`;
+
+        const config = { headers };
+
+        if (method === 'GET') {
+            config.params = data;
+            axiosMethods[method](baseUrl, config)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err.response?.data || { message: err.message }));
+        }
+        else if (method === 'DELETE') {
+            axiosMethods[method](baseUrl, { ...config, data })
+                .then(res => resolve(res.data))
+                .catch(err => {
+                    reject(err.response?.data || { message: err.message });
+                });
+        }
+        else {
+            axiosMethods[method](baseUrl, data, config)
+                .then(res => resolve(res.data))
+                .catch(err => {
+                    // if (err.response?.status === 401) {
+                    //     logoutUser(); // optional
+                    // }
+                    reject(err.response?.data || { message: err.message });
+                });
+        }
     });
-  };
+};
 // export const _REQUEST = (url, method, data) => {
 
 //     return new Promise((resolve, reject) => {
@@ -191,14 +198,14 @@ export const downloadCSVByElement = (elemment, filename = 'data.csv') => {
     }
 
     const csvContent = csv.join('\n');
-    if(table.rows.length <= 1 || csvContent.indexOf("No results found") >= 0) {
+    if (table.rows.length <= 1 || csvContent.indexOf("No results found") >= 0) {
         toast("No results found", {
             type: "warning", // or "error", "info", "warning", "default"
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
-          });
+        });
         return
     }
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

@@ -30,15 +30,11 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/{study}', [StudyController::class, 'show']);
         Route::put('/{study}', [StudyController::class, 'update']);
         Route::delete('/{study}', [StudyController::class, 'destroy']);
-        
-        // // Study participants management
-        // Route::post('/{study}/participants', [StudyController::class, 'addParticipant']);
-        // Route::delete('/{study}/participants/{user}', [StudyController::class, 'removeParticipant']);
     });
 
     Route::prefix('study-requests')->group(function () {
         Route::post('/',                [StudyParticipantRequestController::class, 'invite']);   // researcher
-        Route::post('/delete',         [StudyParticipantRequestController::class, 'cancel']);   // researcher
+        Route::post('/cancel',         [StudyParticipantRequestController::class, 'cancel']);   // researcher
     });
     Route::prefix('my-invitations')->group(function () {
         Route::get('/',                              [StudyParticipantRequestController::class, 'myInvitations']);

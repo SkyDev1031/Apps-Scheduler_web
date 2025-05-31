@@ -1,7 +1,7 @@
 import { _REQUEST, _REQ_METHOD } from './index';
 
 // GET all studies
-export const getStudies = () => _REQUEST('studies', _REQ_METHOD.GET);
+export const getStudies = (researcher_id) => _REQUEST('studies', _REQ_METHOD.GET, { researcher_id });
 
 // GET a single study by ID
 export const getStudyById = (id) => _REQUEST(`studies/${id}`, _REQ_METHOD.GET);
@@ -19,5 +19,5 @@ export const deleteStudy = (id) => _REQUEST(`studies/${id}`, _REQ_METHOD.DELETE)
 export const inviteParticipant = (data) => _REQUEST(`study-requests`, _REQ_METHOD.POST, data);
 
 // DELETE a Participant Requeset by ID
-export const removeParticipant = (data) => _REQUEST(`study-requests/delete`, _REQ_METHOD.POST, data);
+export const cancelInviteParticipant = (data) => _REQUEST(`study-requests/cancel`, _REQ_METHOD.POST, data);
 

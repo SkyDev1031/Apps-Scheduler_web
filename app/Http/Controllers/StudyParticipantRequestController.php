@@ -24,7 +24,7 @@ class StudyParticipantRequestController extends Controller
         // Try to find or create the invite
         [$invite, $created] = StudyParticipantRequest::firstOrCreate(
             $data,
-            ['status' => 'Pending']
+            ['study_status' => 'Pending']
         )->wasRecentlyCreated
             ? [$invite = StudyParticipantRequest::where($data)->first(), true]
             : [$invite = StudyParticipantRequest::where($data)->first(), false];
@@ -105,10 +105,10 @@ class StudyParticipantRequestController extends Controller
         }
 
         $invite = StudyParticipantRequest::where('participant_id', $appUser->id)
-                                         ->where('status', 'pending')
+                                         ->where('study_status', 'Pending')
                                          ->findOrFail($id);
 
-        $invite->update(['status' => 'approved']);
+        $invite->update(['study_status' => 'approved']);
         // $invite->participant->update(['study_id' => $invite->study_id]);
 
         // 🔔 notify researcher
@@ -127,10 +127,10 @@ class StudyParticipantRequestController extends Controller
         }
 
         $invite = StudyParticipantRequest::where('participant_id', $appUser->id)
-                                         ->where('status', 'pending')
+                                         ->where('study_status', 'Pending')
                                          ->findOrFail($id);
 
-        $invite->update(['status' => 'declined']);
+        $invite->update(['study_status' => 'Declined']);
         return response()->json(['message' => 'Invitation declined']);
     }
 }

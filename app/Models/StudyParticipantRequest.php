@@ -11,7 +11,7 @@ class StudyParticipantRequest extends Model
     protected $fillable = [
         'study_id',
         'participant_id',
-        'status', // Pending, Approved, Declined
+        'study_status', // Pending, Approved, Declined
     ];
     public function study()
     {

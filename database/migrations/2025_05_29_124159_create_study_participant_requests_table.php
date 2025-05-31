@@ -18,7 +18,7 @@ class CreateStudyParticipantRequestsTable extends Migration
             $table->foreignId('study_id')->constrained()->onDelete('cascade');
             $table->foreignId('participant_id')->constrained('appusers')->onDelete('cascade');
             $table->enum('type', ['join', 'leave']);
-            $table->enum('status', ['Pending', 'Approved', 'Declined'])->default('Pending');
+            $table->enum('study_status', ['Pending', 'Approved', 'Declined'])->default('Pending');
             $table->timestamps();
         });
     }

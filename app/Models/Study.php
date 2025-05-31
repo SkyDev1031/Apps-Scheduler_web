@@ -25,7 +25,7 @@ class Study extends Model
     public function participants()
     {
         return $this->belongsToMany(AppUser::class, 'study_participant_requests', 'study_id', 'participant_id')
-            ->withPivot('status')
+            ->withPivot('study_status')
             ->withTimestamps();
     }
 
@@ -33,20 +33,11 @@ class Study extends Model
     {
         return $this->hasMany(StudyParticipantRequest::class);
     }
-
-    // App\Models\AppUser.php
-    public function study()
-    {
-        return $this->belongsTo(Study::class);
-    }
-
-    public function participant()
-    {
-        return $this->belongsTo(AppUser::class, 'appuser_id');
-    }
     
     public function invitations()
     {
-        return $this->hasMany(StudyParticipantRequest::class)->with('participant'); // eager load participant data;
+        return $this->hasMany(StudyParticipantRequest::class, 'study_id')
+                    ->where('type', 'join') // or 'invite' if you’re using that
+                    ->with('participant');  // eager load the participant (AppUser)
     }
 }

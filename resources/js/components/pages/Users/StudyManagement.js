@@ -84,6 +84,14 @@ export default function StudyManagement() {
     }
   };
 
+  const handleDeleteStudy = (studyId) => {
+    console.log('Delete study:', studyId);
+  }
+
+  const handleViewStudy = (studyId) => {
+    console.log('View study:', studyId);
+  }
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" gutterBottom>
@@ -108,6 +116,8 @@ export default function StudyManagement() {
               study={study}
               onInviteClick={handleInviteClick}
               onRemoveParticipant={handleRemoveParticipant}
+              onDeleteStudyClick={handleDeleteStudy}
+              onViewStudyClick={handleViewStudy}
             />
           ))
         )

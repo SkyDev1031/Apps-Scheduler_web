@@ -33,4 +33,9 @@ class AppUser extends Model
     {
         return $this->hasMany(StudyParticipantRequest::class, 'participant_id');
     }
+
+    public function participant()
+    {
+        return $this->belongsTo(AppUser::class, 'participant_id');
+    }
 }

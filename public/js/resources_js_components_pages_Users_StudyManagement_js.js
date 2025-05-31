@@ -38180,6 +38180,8 @@ __webpack_require__.r(__webpack_exports__);
 function StudyCard(_ref) {
   var study = _ref.study,
     onInviteClick = _ref.onInviteClick,
+    onViewStudyClick = _ref.onViewStudyClick,
+    onDeleteStudyClick = _ref.onDeleteStudyClick,
     onRemoveParticipant = _ref.onRemoveParticipant;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], {
     sx: {
@@ -38190,22 +38192,23 @@ function StudyCard(_ref) {
         variant: "h6",
         children: study.title
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        children: study.participants.map(function (p) {
+        children: study.invitations.map(function (invitation) {
+          var participant = invitation.participant;
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], {
             secondaryAction: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_7__["default"], {
               edge: "end",
               onClick: function onClick() {
-                return onRemoveParticipant(study.id, p.id);
+                return onRemoveParticipant(study.id, participant.id);
               },
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_0__.FontAwesomeIcon, {
-                icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__.faTrash
+                icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__.faUserMinus
               })
             }),
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_9__["default"], {
-              primary: p.userID,
-              secondary: "Status: ".concat(p.status)
+              primary: (participant === null || participant === void 0 ? void 0 : participant.userID) || (participant === null || participant === void 0 ? void 0 : participant.name) || 'Unknown User',
+              secondary: "Status: ".concat(invitation.study_status)
             })
-          }, p.id);
+          }, invitation.id);
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_10__["default"], {
         variant: "outlined",
@@ -38215,7 +38218,28 @@ function StudyCard(_ref) {
         onClick: function onClick() {
           return onInviteClick(study.id);
         },
+        className: "action-button-study",
         children: "Invite Participants"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        variant: "outlined",
+        startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_0__.FontAwesomeIcon, {
+          icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__.faEye
+        }),
+        onClick: function onClick() {
+          return onViewStudyClick(study.id);
+        },
+        className: "action-button-study",
+        children: "View Study Group"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        variant: "outlined",
+        startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_0__.FontAwesomeIcon, {
+          icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__.faTrash
+        }),
+        onClick: function onClick() {
+          return onDeleteStudyClick(study.id);
+        },
+        className: "action-button-study",
+        children: "Delete Study Group"
       })]
     })
   });
@@ -38407,6 +38431,12 @@ function StudyManagement() {
       return _ref3.apply(this, arguments);
     };
   }();
+  var handleDeleteStudy = function handleDeleteStudy(studyId) {
+    console.log('Delete study:', studyId);
+  };
+  var handleViewStudy = function handleViewStudy(studyId) {
+    console.log('View study:', studyId);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_8__["default"], {
     sx: {
       p: 4
@@ -38430,7 +38460,9 @@ function StudyManagement() {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_StudyCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
         study: study,
         onInviteClick: handleInviteClick,
-        onRemoveParticipant: handleRemoveParticipant
+        onRemoveParticipant: handleRemoveParticipant,
+        onDeleteStudyClick: handleDeleteStudy,
+        onViewStudyClick: handleViewStudy
       }, study.id);
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_MuiStudyGroupModal__WEBPACK_IMPORTED_MODULE_1__["default"], {
       open: modalOpen,

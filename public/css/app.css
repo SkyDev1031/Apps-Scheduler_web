@@ -167,3 +167,7 @@
 .p-menu .p-menuitem-icon[style] {
   color: inherit !important;
 }
+
+.action-button-study {
+  margin: 3px !important;
+}

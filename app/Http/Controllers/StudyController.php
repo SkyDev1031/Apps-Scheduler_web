@@ -17,21 +17,19 @@ class StudyController extends Controller
     // Get all studies
     public function index(Request $request)
     {
-        $query = Study::with(['researcher', 'participants']);
-        
-        // Filter by researcher
+        $query = Study::with(['researcher', 'invitations.participant']); // ← key update
+    
         if ($request->has('researcher_id')) {
             $query->where('researcher_id', $request->researcher_id);
         }
-        
-        // Search by title or study code
+    
         if ($request->has('search')) {
             $query->where(function($q) use ($request) {
                 $q->where('title', 'like', '%'.$request->search.'%')
-                    ->orWhere('study_code', 'like', '%'.$request->search.'%');
+                  ->orWhere('study_code', 'like', '%'.$request->search.'%');
             });
         }
-
+    
         return response()->json($query->paginate(10));
     }
 
